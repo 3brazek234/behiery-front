@@ -11,6 +11,7 @@ import { Trash2 } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
+import Image from "next/image"
 
 export default function CartPage() {
   const { items, total, toggleFetch } = useCart()
@@ -19,11 +20,16 @@ export default function CartPage() {
 
   // تخزين الكميات لكل منتج بالـ id
   const [quantities, setQuantities] = useState<{ [key: number]: number }>(
-    items.reduce((acc: any, item) => {
+    items.reduce((acc: Record<number, number>, item) => {
       acc[item.id as any] = item.quantity
       return acc
     }, {})
   )
+
+  // اجعل الـ useEffect فوق أي return عشان يفضل ثابت
+  useEffect(() => {
+    toggleFetch()
+  }, [toggleFetch])
 
   if (items.length === 0) {
     return (
@@ -49,21 +55,18 @@ export default function CartPage() {
     })
   }
 
-  useEffect(() => {
-    toggleFetch()
-  }, [])
-  
-
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-8 text-primary">السلة</h1>
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2 space-y-4">
-          {items && items?.length > 0 && items?.map((item:any) => (
+          {items.map((item: any) => (
             <div key={item.id} className="flex flex-wrap items-center gap-4 border pb-4 px-2">
-              <img
+              <Image
                 src={item.product?.images[0]}
                 alt={item.product.name_ar}
+                width={96}
+                height={96}
                 className="w-24 h-24 object-cover rounded"
               />
               <div className="flex-grow pt-2">
@@ -150,7 +153,7 @@ export default function CartPage() {
               <span>السعر النهائي</span>
               <span>{total.toFixed(2)} جنيه</span>
             </div>
-            <Link href="/checkout" >
+            <Link href="/checkout">
               <Button className="w-full mt-6">اكمال الطلب</Button>
             </Link>
           </div>

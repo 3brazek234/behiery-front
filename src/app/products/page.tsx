@@ -29,7 +29,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         <div className={cn("lg:w-5/6 gap-4", !bestSeller || !sales ? "columns-1 sm:columns-2 md:columns-3 lg:columns-4" : "grid grid-cols-2 md:grid-cols-5 lg:grid-cols-6 lg:!w-full")}>
           {products.length > 0 ? (
             products.map((product) => (
-              <div className='mb-4 w-full'>
+              <div key={product?.id} className='mb-4 w-full'>
                 <ProductCard key={product.id} product={product} />
               </div>
             ))
