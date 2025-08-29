@@ -1,18 +1,27 @@
 "use client"
-import useUserStore from '@/store/user'
-import { useSearchParams } from 'next/navigation'
-import React, { useEffect } from 'react'
+
+import useUserStore from "@/store/user"
+import { useSearchParams } from "next/navigation"
+import React, { useEffect, Suspense } from "react"
+
+function TokenHandler() {
+  const searchParams = useSearchParams()
+  const { setToken } = useUserStore()
+
+  useEffect(() => {
+    const token = searchParams.get("token")
+    if (token) {
+      setToken(token)
+    }
+  }, [searchParams, setToken])
+
+  return <div />
+}
 
 export default function Page() {
-    const searchParams = useSearchParams()
-    const {setToken} = useUserStore()
-    useEffect(() => {
-      if(searchParams.get("token")) {
-          setToken(searchParams.get("token") as string)
-      }
-    }, [searchParams.get("token")])
   return (
-    <div>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <TokenHandler />
+    </Suspense>
   )
 }

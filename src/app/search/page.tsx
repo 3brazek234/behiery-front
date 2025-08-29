@@ -3,23 +3,23 @@
 import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { ProductData } from "@/types/product"
 import { ProductCard } from '@/components/product-card'
 import { products } from '@/lib/data'
+import { Product } from '@/types/product'
 
-async function searchProducts(query: string): Promise<ProductData[]> {
+async function searchProducts(query: string): Promise<Product[]> {
   await new Promise(resolve => setTimeout(resolve, 500))
 
   return products.filter(product => 
-    product.name.toLowerCase().includes(query.toLowerCase()) ||
-    product.description.toLowerCase().includes(query.toLowerCase())
+    product?.name?.ar?.toLowerCase().includes(query.toLowerCase()) ||
+    product?.description?.ar?.toLowerCase().includes(query.toLowerCase())
   )
 }
 
 function SearchResults() {
   const searchParams = useSearchParams()
   const query = searchParams.get('q') || ''
-  const [results, setResults] = useState<ProductData[]>([])
+  const [results, setResults] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
