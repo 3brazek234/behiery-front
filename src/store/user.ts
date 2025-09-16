@@ -1,6 +1,6 @@
 import { Profile } from "@/types/profile";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface UserStore {
   user: Profile | null;
@@ -22,16 +22,18 @@ const useUserStore = create<UserStore>()(
     }),
     {
       name: "auth",
-      storage: {
-        getItem: (name) => {
-          const item = sessionStorage.getItem(name);
-          return item ? JSON.parse(item) : null;
-        },
-        setItem: (name, value) => {
-          sessionStorage.setItem(name, JSON.stringify(value));
-        },
-        removeItem: (name) => sessionStorage.removeItem(name),
-      },
+      storage: createJSONStorage(() => localStorage)
+      // {
+      //   getItem: (name) => {
+      //     // const item = sessionStorage.getItem(name);
+      //     const item = localStorage.getItem(name);
+      //     return item ? JSON.parse(item) : null;
+      //   },
+      //   setItem: (name, value) => {
+      //     localStorage.setItem(name, JSON.stringify(value));
+      //   },
+      //   removeItem: (name) => localStorage.removeItem(name),
+      // },
     }
   )
 );
