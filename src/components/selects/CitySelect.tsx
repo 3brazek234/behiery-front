@@ -44,7 +44,7 @@ export default function CitySelect({ onSelect }: Props) {
       options={options}
       value={selectedCity}
       onChange={handleChange}
-      placeholder="اختر مدينة"
+      placeholder="اختر المنطقة"
       isClearable
     />
   );

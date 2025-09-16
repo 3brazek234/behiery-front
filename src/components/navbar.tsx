@@ -54,7 +54,10 @@ export function Navbar() {
         </Sheet>
         <Link href="/" className="mr-6 flex items-center gap-x-2">
           <Image src="https://behiryperfume.com/images/logo.svg" alt="Logo" width={40} height={40} className="size-8" />
-          <span className="font-bold bg-gradient-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent hidden md:inline-block">Behiry Perfume</span>
+          <span className="font-bold bg-gradient-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent hidden md:inline-block">
+          {/* Behiry Perfume – Official Online Store */}
+بحيري للعطور {"–"} المتجر الإلكتروني الرسمي
+          </span>
         </Link>
         <div className="flex flex-1 items-center justify-end gap-x-4">
           <nav className="flex items-center gap-x-2">
@@ -109,7 +112,7 @@ function MobileNav() {
         href="/products"
         className="text-sm font-medium py-3 transition-colors hover:text-primary"
       >
-        المنتجات
+        العطور
       </Link>
        {/* <Link
         href="/categories"
@@ -124,10 +127,17 @@ function MobileNav() {
         السلة
       </Link>
       <Link
-        href="/products?n=best=best-seler"
+        href="https://behiryperfume.com/about"
         className="text-sm font-medium py-3 transition-colors hover:text-primary"
       >
-        الاكثر مبيعا
+      من نحن        
+      </Link>
+      <Link
+        href="https://behiryperfume.com/contact"
+        className="text-sm font-medium py-3 transition-colors hover:text-primary"
+      >
+        اتصل بنا
+
       </Link>
     </nav>
   )

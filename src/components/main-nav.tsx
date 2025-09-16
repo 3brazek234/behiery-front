@@ -16,7 +16,7 @@ export function MainNav({
         href="/products"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        المنتجات
+        العطور
       </Link>
       
        {/* <Link
@@ -25,13 +25,21 @@ export function MainNav({
       >
         الفئات
       </Link> */}
-      
-       <Link
-        href="/products"
+  
+
+      <Link
+        href="https://behiryperfume.com/about"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        الاكثر مبيعا
+من نحن
       </Link>
+
+      <Link
+        href="https://behiryperfume.com/contact"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+اتصل بنا
+</Link>
       
     
     </nav>

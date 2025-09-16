@@ -92,7 +92,7 @@ export function Filter({ categories, types }: FilterProps) {
             <SelectValue placeholder="اختر الجنس" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">الكل</SelectItem>
+            <SelectItem value="unisex">للجنسين</SelectItem>
             <SelectItem value="men">رجالي</SelectItem>
             <SelectItem value="women">حريمي</SelectItem>
             {/* <SelectItem value="unisex">للجنسين</SelectItem> */}
@@ -109,7 +109,7 @@ export function Filter({ categories, types }: FilterProps) {
               <SelectValue placeholder="اختر النوع" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">كل الأنواع</SelectItem>
+              {/* <SelectItem value="all">كل الأنواع</SelectItem> */}
               {types.map((type) => (
                 <SelectItem key={type.id} value={type.id.toString()}>
                   {type.type.ar ?? type.type.en}
