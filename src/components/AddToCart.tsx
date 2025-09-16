@@ -111,7 +111,7 @@ export function AddToCart({ product, setAdded }: AddToCartProps) {
           className="w-full font-semibold mt-2 transition-all duration-300"
           size="lg"
           onClick={handleAddToCart}
-          disabled={isAdded || !selectedOptionId}
+          // disabled={isAdded || !selectedOptionId}
         >
           {isAdded ? (
             <>

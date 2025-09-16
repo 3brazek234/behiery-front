@@ -16,36 +16,17 @@ import { usePost } from "@/hooks/UsePost";
 import toast from "react-hot-toast";
 import { useCart } from "@/store/cartStore";
 import CitySelect from "@/components/selects/CitySelect";
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-
-const checkoutSchema = z.object({
-  first_name: z.string().min(1, "الاسم الأول مطلوب"),
-  last_name: z.string().min(1, "اسم العائلة مطلوب"),
-  phone: z.string().min(1, "رقم الهاتف مطلوب"),
-  district_id: z.string().min(1, "المنطقة مطلوبة"),
-  address_name: z.string().min(1, "اسم الشارع مطلوب"),
-  address: z.string().min(1, "العنوان مطلوب"),
-  main_instructions: z.string().optional(),
-  floor: z.string().min(1, "الدور مطلوب"),
-  apartment: z.string().min(1, "الشقة مطلوبة"),
-  remember: z.union([z.string(), z.number()]).optional(),
-
-  // الايميل اختياري
-  email: z.string().email("البريد الإلكتروني غير صالح").optional(),
-})
-
+import { useGet } from "@/hooks/useGet";
+import Link from "next/link";
 
 export default function CheckoutAddressPage() {
   const { postData, loading } = usePost<any>();
   const { clearCart, items } = useCart();
   const [summary, setSummary] = useState<any>(null);
 
-  const form:any = useForm<z.infer<any>>({
-    resolver: zodResolver(checkoutSchema),
+  const form = useForm({
     defaultValues: {
-      // @ts-ignore
-      address_id: null as any,
+      address_id: null,
       first_name: "",
       last_name: "",
       phone: "",
@@ -61,14 +42,27 @@ export default function CheckoutAddressPage() {
   });
 
   const onSubmit = async (values: any) => {
+    const valuesNew = form.getValues();
+
+  if (
+    valuesNew.district_id === "" ||
+    valuesNew.first_name.trim() === "" ||
+    valuesNew.last_name.trim() === "" ||
+    valuesNew.phone.trim() === "" ||
+    valuesNew.address.trim() === "" ||
+    valuesNew.address_name.trim() === ""
+  ) {
+  toast.error("الرجاء اكمال جميع الحقول");
+  return;
+}
     try {
-      postData("/orders/checkout", {
-        ...values,
-        remember: values.remember === true ? 1 : 0,
-      }).then((res: any) => {
-        toast.success("تم ارسال الطلب بنجاح");
-        clearCart();
-      });
+          const res = await postData("/orders/checkout", values);
+          if (res?.status === 200) {
+            toast.success("تم ارسال الطلب");
+            console.log(res); // دايماً ده الأحدث
+          }else {
+            toast.error(res?.response?.data?.message);
+          }
     } catch (e: any) {
       const err = e?.response?.data?.message || e.message;
       toast.error(err);
@@ -76,20 +70,22 @@ export default function CheckoutAddressPage() {
   };
 
   useEffect(() => {
-    if (form.watch("district_id")) {
-      postData("/orders/receipt", {
-        type: "cart",
-        is_gift: items.some((item) => item.is_gift === 1) ? 1 : 0,
-        address_id: null,
-        district_id: form.watch("district_id"),
-      }).then((res: any) => {
-        console.log(res?.data);
-
-        setTimeout(() => {
-          setSummary(res?.data);
-        }, 500);
-        // toast.success('تم ارسال الطلب بنجاح')
-      });
+    if(form.watch("district_id") && items?.length <= 0) {
+      toast.error("لا يوجد منتجات في السلة")
+    } else {
+      if (form.watch("district_id")) {
+        postData("/orders/receipt", {
+          type: "cart",
+          is_gift: items.some((item) => item.is_gift === 1) ? 1 : 0,
+          address_id: null,
+          district_id: form.watch("district_id"),
+        }).then((res: any) => {
+          setTimeout(() => {
+            setSummary(res?.data);
+          }, 500);
+          // toast.success('تم ارسال الطلب بنجاح')
+        });
+      }
     }
   }, [form.watch("district_id")]);
   return (
@@ -102,8 +98,8 @@ export default function CheckoutAddressPage() {
           <div className="bg-primary/5 p-6 rounded-lg">
             <h2 className="text-xl font-semibold mb-4">ملخص الطلب</h2>
 
-          {summary &&  <>
-            {Object.entries(summary.items_price).map(([name, price]) => (
+          {items?.length > 0 && summary &&  <>
+            {Object.entries(summary?.items_price).map(([name, price]) => (
               <div key={name} className="flex justify-between mb-2">
                 <span>{name}</span>
                 <span>{price as any} جنيه</span> {/* هنا لازم يكون price */}
@@ -152,10 +148,15 @@ export default function CheckoutAddressPage() {
       <div className=" mx-auto ">
         <h1 className="text-3xl font-bold text-primary mb-6">بيانات التوصيل</h1>
         <p className="text-muted-foreground mb-8">
-          من فضلك أدخل بيانات الشحن بدقة لإتمام الطلب.
+          {
+            items?.length <= 0 ? <div className="h-[50vh]">
+              لا يوجد منتجات ف السلة يرجي الاضافة اولا
+              <Link className="text-primary ps-2" href="/products">عرض المنتجات</Link>
+            </div> : "من فضلك أدخل بيانات الشحن بدقة لإتمام الطلب."
+          }
         </p>
 
-        <Form {...form}>
+       {items?.length > 0 && <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* الصف الأول */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -195,7 +196,7 @@ export default function CheckoutAddressPage() {
                   <FormItem>
                     <FormLabel>رقم الهاتف</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={loading} />
+                      <Input type="tel" {...field} disabled={loading} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -208,7 +209,7 @@ export default function CheckoutAddressPage() {
                   <FormItem>
                     <FormLabel>البريد الإلكتروني (اختياري)</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={loading} />
+                      <Input type="email" {...field} disabled={loading} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -335,7 +336,7 @@ export default function CheckoutAddressPage() {
               </Button>
             </div>
           </form>
-        </Form>
+        </Form>}
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ export function usePost<T = any>(): UsePostResult<T> {
   const postData = async (url: string, body?: any, config?: AxiosRequestConfig) => {
     setLoading(true);
     setError(null);
+    setData(null);
     try {
       const res = await axiosApp.post<T>(url, body, {
         ...config,
@@ -29,9 +30,10 @@ export function usePost<T = any>(): UsePostResult<T> {
         },
       });
       setData(res.data);
-      return res.data
+      return res?.data || res
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
+      return err
     } finally {
       setLoading(false);
     }
