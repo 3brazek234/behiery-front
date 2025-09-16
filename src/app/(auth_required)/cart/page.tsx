@@ -146,7 +146,7 @@ export default function CartPage() {
         </div>
         <div className="md:col-span-1">
           <div className="bg-gray-100 p-6 rounded-lg">
-            <h2 className="text-xl font-semibold mb-4">ملخص الطلب</h2>
+            <h2 className="text-xl font-semibold mb-4">ملخص السلة</h2>
             <div className="flex justify-between mb-2">
               <span>السعر</span>
               <span>{total.toFixed(2)} جنيه</span>
