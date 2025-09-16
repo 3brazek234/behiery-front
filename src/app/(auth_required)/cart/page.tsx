@@ -151,14 +151,14 @@ export default function CartPage() {
               <span>السعر الاول</span>
               <span>{total.toFixed(2)} جنيه</span>
             </div>
-            <div className="flex justify-between mb-2">
+            {/* <div className="flex justify-between mb-2">
               <span>الشحن</span>
               <span>مجاني</span>
             </div>
             <div className="flex justify-between font-semibold text-lg mt-4 pt-4 border-t">
               <span>السعر النهائي</span>
               <span>{total.toFixed(2)} جنيه</span>
-            </div>
+            </div> */}
             <Link href="/checkout">
               <Button className="w-full mt-6">اكمال الطلب</Button>
             </Link>
