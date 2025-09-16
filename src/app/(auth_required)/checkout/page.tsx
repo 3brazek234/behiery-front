@@ -57,7 +57,7 @@ export default function CheckoutAddressPage() {
 }
     try {
           const res = await postData("/orders/checkout", values);
-          if (res?.status === 200) {
+          if (res?.response?.data?.message ||res?.status === 200) {
             toast.success("تم ارسال الطلب");
             console.log(res); // دايماً ده الأحدث
           }else {
