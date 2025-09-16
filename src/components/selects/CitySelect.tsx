@@ -5,7 +5,7 @@ import axiosApp from "@/lib/axios";
 
 interface City {
   id: number;
-  city: {
+  district: {
     en: string;
     ar: string;
   };
@@ -25,10 +25,10 @@ export default function CitySelect({ onSelect }: Props) {
   const [selectedCity, setSelectedCity] = useState<Option | null>(null);
 
   useEffect(() => {
-    axiosApp.get<City[]>("/dropdowns/cities").then((res) => {
+    axiosApp.get<City[]>("/dropdowns/districts").then((res) => {
       const opts = res.data.map((city) => ({
         value: city.id,
-        label: city.city.ar, // أو en حسب اللغة
+        label: city.district.ar, // أو en حسب اللغة
       }));
       setOptions(opts);
     });
