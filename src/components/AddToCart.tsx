@@ -1,29 +1,39 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Check, ShoppingCart } from 'lucide-react'
-import { Product, Option } from '@/types/product'
-import { useCart } from '@/store/cartStore'
-import { usePost } from '@/hooks/UsePost'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Check, ShoppingCart } from "lucide-react";
+import { Product, Option } from "@/types/product";
+import { useCart } from "@/store/cartStore";
+import { usePost } from "@/hooks/UsePost";
+import useUserStore from "@/store/user";
+import Link from "next/link";
 
 interface AddToCartProps {
-  product: Product
+  product: Product;
+  setAdded?: any;
 }
 
-export function AddToCart({ product }: AddToCartProps) {
-const {toggleFetch} = useCart()
-  const {postData} = usePost()
-  const [isAdded, setIsAdded] = useState(false)
+export function AddToCart({ product, setAdded }: AddToCartProps) {
+  const { toggleFetch } = useCart();
+  const { user } = useUserStore();
+  const { postData } = usePost();
+  const [isAdded, setIsAdded] = useState(false);
   const [selectedOptionId, setSelectedOptionId] = useState<string>(
-    product.options[0]?.id.toString() || ''
-  )
-  const [quantity, setQuantity] = useState<number>(1)
+    product.options[0]?.id.toString() || ""
+  );
+  const [quantity, setQuantity] = useState<number>(1);
 
   const handleAddToCart = () => {
-    if (!selectedOptionId) return // تأكد من اختيار option_id
+    if (!selectedOptionId) return; // تأكد من اختيار option_id
     postData("/cart", {
       product_id: product.id,
       mix_id: null,
@@ -33,10 +43,14 @@ const {toggleFetch} = useCart()
       ebook: 0,
       is_gift: 0,
       quantity: Math.max(1, quantity), // التأكد من أن الكمية لا تقل عن 1
-    }).then((e) => toggleFetch())
-    setIsAdded(true)
-    setTimeout(() => setIsAdded(false), 2000)
-  }
+    }).then((e) => toggleFetch());
+    setIsAdded(true);
+   
+    setTimeout(() => {
+      setAdded((prev: any) => !prev);
+      setIsAdded(false)
+    }, 2000);
+  };
 
   return (
     <div className="space-y-4">
@@ -92,22 +106,33 @@ const {toggleFetch} = useCart()
       </div>
 
       {/* زر إضافة إلى السلة */}
-      <Button
-        className="w-full font-semibold transition-all duration-300"
-        size="lg"
-        onClick={handleAddToCart}
-        disabled={isAdded || !selectedOptionId}
-      >
-        {isAdded ? (
-          <>
-            <Check className="mr-2 h-4 w-4" /> Added to Cart
-          </>
-        ) : (
-          <>
-            <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
-          </>
-        )}
-      </Button>
+      {user ? (
+        <Button
+          className="w-full font-semibold mt-2 transition-all duration-300"
+          size="lg"
+          onClick={handleAddToCart}
+          disabled={isAdded || !selectedOptionId}
+        >
+          {isAdded ? (
+            <>
+              <Check className="mr-2 h-4 w-4" /> تم اضافته
+            </>
+          ) : (
+            <>
+              <ShoppingCart className="mr-2 h-4 w-4" /> اضافة الى السلة
+            </>
+          )}
+        </Button>
+      ) : (
+        <Link href="/login">
+          <Button
+            className="w-full font-semibold mt-2 transition-all duration-300"
+            size="lg"
+          >
+        تسجيل الدخول اولا
+          </Button>
+        </Link>
+      )}
     </div>
-  )
+  );
 }

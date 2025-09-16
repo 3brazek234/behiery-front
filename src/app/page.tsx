@@ -3,6 +3,8 @@ import Hero from "@/components/hero";
 // import CategoriesSection from "@/components/sections/CategoriesSection";
 import ProductSection from "@/components/sections/productsSection";
 
+export const dynamic = "force-dynamic"
+
 export default async function Home() {
   const productsBestSeller = await getProducts("/products/best-seller")
   const {data : productsSales} = (await getProducts("/products/sales")) as any

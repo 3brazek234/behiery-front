@@ -5,6 +5,8 @@ import { getProductByID } from "@/apis/products";
 import { ReviewsView } from "@/components/Reviews";
 import { AddToCart } from "@/components/AddToCart";
 
+export const dynamic = "force-dynamic"
+
 export default async function ProductPage({
   params,
 }: {

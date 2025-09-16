@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Poppins } from "next/font/google";
+import { Tajawal } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import AutoStart from "@/components/auto-start";
 import {Toaster} from "react-hot-toast"
 
-const poppins = Poppins({
+const poppins = Tajawal({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["200", "300", "400", "500", "700", "800", "900"],
 });
 
 
@@ -30,7 +30,10 @@ export default function RootLayout({
         <AutoStart />
         <Navbar />
         {children}
-          
+        <div className="flex bg-gray-100 flex-col items-center py-6 justify-center">
+          <p>© 2025 Behiry Tech. جميع الحقوق محفوظة.</p>
+          <p className="app-version">الإصدار 1.0.0</p>
+        </div>
       </body>
     </html>
   );

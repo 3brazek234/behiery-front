@@ -19,12 +19,12 @@ export function MainNav({
         المنتجات
       </Link>
       
-       <Link
+       {/* <Link
         href="/categories"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         الفئات
-      </Link>
+      </Link> */}
       
        <Link
         href="/products"

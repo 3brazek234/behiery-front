@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
 export function ProductCard({ product }: { product: Product }) {
   const [isAdded, setIsAdded] = useState(false);
-
+  const [open, setOpen] = useState(false);
   const handleAddToCart = () => {
     // addToCart({
     //   ...product,
@@ -128,7 +128,7 @@ export function ProductCard({ product }: { product: Product }) {
             </>
           ) : (
             <>
-              <Dialog>
+              <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger className="flex items-center">
                   <ShoppingCart className="md:me-2 size-3 md:size-4" />{" "}
                   <span className="hidden md:block">أضف إلى السلة</span>
@@ -138,14 +138,13 @@ export function ProductCard({ product }: { product: Product }) {
                     <h1 className="text-3xl font-bold text-gray-900">
                       {product.name.ar}
                     </h1>
-
                     <p className="text-2xl font-semibold text-gray-700">
                       {product.options[0]?.price
                         ? parseFloat(product.options[0].price).toFixed(2)
                         : "غير متاح"}
                     </p>
                   </div>
-                  <AddToCart product={product} />
+                  <AddToCart setAdded={setOpen} product={product} />
                 </DialogContent>
               </Dialog>
             </>

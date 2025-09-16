@@ -25,8 +25,8 @@ export function Filter({ categories, types }: FilterProps) {
   const [typeId, setTypeId] = useState<string>(searchParams.get('type') || '')
   const [search, setSearch] = useState<string>(searchParams.get('search') || '')
   const [priceRange, setPriceRange] = useState<number[]>([
-    parseFloat(searchParams.get('min_price') || '0'),
-    parseFloat(searchParams.get('max_price') || '1000'),
+    parseFloat(searchParams.get('min_price') || '300'),
+    parseFloat(searchParams.get('max_price') || '2000'),
   ])
 
   const updateFilters = () => {
@@ -38,8 +38,8 @@ export function Filter({ categories, types }: FilterProps) {
     if (gender) params.set('gender', gender)
     if (typeId) params.set('type', typeId)
     if (search) params.set('search', search)
-    if (priceRange[0] > 0) params.set('min_price', priceRange[0].toString())
-    if (priceRange[1] < 1000) params.set('max_price', priceRange[1].toString())
+    if (priceRange[0] > 300) params.set('min_price', priceRange[0].toString())
+    if (priceRange[1] < 1999) params.set('max_price', priceRange[1].toString())
 
     router.push(`?${params.toString()}`, { scroll: false })
   }
@@ -126,13 +126,14 @@ export function Filter({ categories, types }: FilterProps) {
         <Slider
           value={priceRange}
           onValueChange={setPriceRange}
-          max={1000}
+          min={300}
+          max={2000}
           step={10}
-          className="mt-2"
+          className="mt-2 "
         />
         <div className="flex justify-between mt-2 text-sm text-muted-foreground">
-          <span>{priceRange[0]} جنيه</span>
           <span>{priceRange[1]} جنيه</span>
+          <span>{priceRange[0]} جنيه</span>
         </div>
       </div>
 
@@ -145,7 +146,7 @@ export function Filter({ categories, types }: FilterProps) {
           setGender('')
           setTypeId('')
           setSearch('')
-          setPriceRange([0, 1000])
+          setPriceRange([300, 2000])
         }}
       >
         إعادة تعيين الفلاتر

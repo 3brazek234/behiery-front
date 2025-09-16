@@ -22,6 +22,8 @@ import {
 import { usePost } from '@/hooks/UsePost'
 import toast from 'react-hot-toast'
 import { useCart } from '@/store/cartStore'
+import CitySelect from '@/components/selects/CitySelect'
+import { Label } from '@/components/ui/label'
 
 export default function CheckoutAddressPage() {
   const { postData, loading } = usePost<any>()
@@ -46,10 +48,14 @@ export default function CheckoutAddressPage() {
 
   const onSubmit = async (values: any) => {
     try {
-      await postData('/orders/checkout', values)
-      toast.success('تم ارسال الطلب بنجاح')
-      clearCart()
-    } catch (e) {}
+      postData('/orders/checkout', {...values, remember: values.remember === true ? 1 : 0}).then((res: any) => {
+        toast.success('تم ارسال الطلب بنجاح')
+        clearCart()
+      })
+    } catch (e:any) {
+      const err = e?.response?.data?.message || e.message;
+      toast.error(err)
+    }
   }
 
   return (
@@ -82,7 +88,7 @@ export default function CheckoutAddressPage() {
                 name="last_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>اسم العائلة</FormLabel>
+                    <FormLabel>اسم الاخير</FormLabel>
                     <FormControl>
                       <Input {...field} disabled={loading} />
                     </FormControl>
@@ -111,7 +117,7 @@ export default function CheckoutAddressPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>البريد الإلكتروني</FormLabel>
+                    <FormLabel>البريد الإلكتروني (اختياري)</FormLabel>
                     <FormControl>
                       <Input {...field} disabled={loading} />
                     </FormControl>
@@ -128,22 +134,7 @@ export default function CheckoutAddressPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>المنطقة</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={String(field.value)}
-                      disabled={loading}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="اختر المنطقة" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="24">حي 24</SelectItem>
-                        <SelectItem value="25">حي 25</SelectItem>
-                        <SelectItem value="26">حي 26</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <CitySelect onSelect={(id) => field?.onChange(id)} />
                   </FormItem>
                 )}
               />
@@ -153,7 +144,7 @@ export default function CheckoutAddressPage() {
                 name="address_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>اسم العنوان</FormLabel>
+                    <FormLabel>اسم الشارع</FormLabel>
                     <FormControl>
                       <Input {...field} disabled={loading} />
                     </FormControl>
@@ -184,7 +175,7 @@ export default function CheckoutAddressPage() {
                   <FormItem className="md:col-span-2">
                     <FormLabel>تعليمات للمندوب</FormLabel>
                     <FormControl>
-                      <Textarea rows={3} {...field} disabled={loading} />
+                      <Textarea rows={1} className='min-h-10' {...field} disabled={loading} />
                     </FormControl>
                   </FormItem>
                 )}
@@ -225,9 +216,13 @@ export default function CheckoutAddressPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>تذكر العنوان</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={loading} />
-                  </FormControl>
+                  <div className='flex items-center gap-2'>
+                    <FormControl>
+                      <Input className='!size-4' type="checkbox"
+            {...field} disabled={loading} />
+                    </FormControl>
+                      <span>تذكر العنوان</span>
+                  </div>
                 </FormItem>
               )}
             />

@@ -46,12 +46,18 @@ export default function CartPage() {
   const updateCart = async (data: { id: number; quantity?: number; is_gift?: 1 | 0 }) => {
     putData(`/cart/${data.id}`, data).then(() => {
       toast.success("تم تحديث السلة بنجاح")
+      setTimeout(() => {
+        toggleFetch()
+      }, 1000)
     })
   }
 
   const deleteCart = async (id: number) => {
-    deleteData(`/cart/${id}`).then(() => {
+    deleteData(`/cart?product_id=${id}`).then(() => {
       toast.success("تم حذف المنتج من السلة بنجاح")
+      setTimeout(() => {
+        toggleFetch()
+      }, 1000)
     })
   }
 
@@ -130,7 +136,7 @@ export default function CartPage() {
                 <Button
                   variant="destructive"
                   size="icon"
-                  onClick={() => deleteCart(item.id)}
+                  onClick={() => deleteCart(item?.product?.id)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

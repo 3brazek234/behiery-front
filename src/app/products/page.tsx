@@ -3,6 +3,8 @@ import { getProducts, getProductsSearch } from '@/apis/products'
 import { Filter } from '@/components/product-filters'
 import { cn } from '@/lib/utils'
 
+export const dynamic = "force-dynamic"
+
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
   const query = await searchParams
   const bestSeller = (query as any).best === "best-seller" ? "الاكثر مبيعا" : false

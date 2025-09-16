@@ -1,7 +1,7 @@
 "use client"
 
 import useUserStore from "@/store/user"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, redirect } from "next/navigation"
 import React, { useEffect, Suspense } from "react"
 
 function TokenHandler() {
@@ -12,6 +12,9 @@ function TokenHandler() {
     const token = searchParams.get("token")
     if (token) {
       setToken(token)
+      redirect("/")
+      console.log(token);
+      
     }
   }, [searchParams, setToken])
 

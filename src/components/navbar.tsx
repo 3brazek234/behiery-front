@@ -111,12 +111,12 @@ function MobileNav() {
       >
         المنتجات
       </Link>
-       <Link
+       {/* <Link
         href="/categories"
         className="text-sm font-medium py-3 transition-colors hover:text-primary"
       >
         الفئات
-      </Link>
+      </Link> */}
        <Link
         href="/cart"
         className="text-sm font-medium py-3 transition-colors hover:text-primary"

@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import { User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
+  // DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import useUserStore from "@/store/user";
@@ -21,7 +21,7 @@ const UserDropdown: React.FC = () => {
   return (
     <DropdownMenu dir="rtl">
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none transition duration-150">
+        <button className="flex items-end gap-2 text-gray-700 hover:text-gray-900 focus:outline-none transition duration-150">
           <span className="text-sm font-medium truncate !w-30">
             {user.name?.split(" ")[0]}
           </span>
@@ -36,11 +36,11 @@ const UserDropdown: React.FC = () => {
           </p>
           <p className="text-xs text-gray-500 truncate">{user.email}</p>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
 
-        <DropdownMenuItem asChild>
+        {/* <DropdownMenuItem asChild>
           <Link href="/profile">الملف الشخصي</Link>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
 
         <DropdownMenuItem
           onClick={logout}
