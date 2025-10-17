@@ -1,6 +1,7 @@
 import React from 'react'
 import bg from "../../public/fulvio-ciccolo-tSZO3qHhCM0-unsplash.jpg"
 import Image from 'next/image'
+import Link from 'next/link'
 export default function Hero() {
   return (
   <section className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] flex items-center justify-center text-center overflow-hidden">
@@ -23,7 +24,7 @@ export default function Hero() {
             اكتشف، استكشف واجمع العطور الفاخرة مع تطبيق Behiry Perfume - رفيقك المثالي في عالم الروائح الساحرة.
           </p>
           
-          <a
+          <Link
             href="/products" // 🚨 يفضل يكون رابط حقيقي لصفحة المنتجات
             className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300 transition-all duration-300 shadow-lg" // 🚨 زرار أكبر بلون برتقالي مميز و shadow
           >
@@ -31,7 +32,7 @@ export default function Hero() {
             <svg className="w-4 h-4 rtl:rotate-180 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
 
