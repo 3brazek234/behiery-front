@@ -45,10 +45,10 @@ export function AddToCart({ product, setAdded }: AddToCartProps) {
       quantity: Math.max(1, quantity), // التأكد من أن الكمية لا تقل عن 1
     }).then((e) => toggleFetch());
     setIsAdded(true);
-   
+
     setTimeout(() => {
       setAdded((prev: any) => !prev);
-      setIsAdded(false)
+      setIsAdded(false);
     }, 2000);
   };
 
@@ -58,7 +58,7 @@ export function AddToCart({ product, setAdded }: AddToCartProps) {
       {product.options.length > 0 && (
         <div>
           <label htmlFor="option" className="text-sm font-medium text-gray-700">
-            اختر ما يناسبك
+            أختر الحجم الذي يناسبك{" "}
           </label>
           <Select value={selectedOptionId} onValueChange={setSelectedOptionId}>
             <SelectTrigger id="option" className="mt-1">
@@ -67,7 +67,7 @@ export function AddToCart({ product, setAdded }: AddToCartProps) {
             <SelectContent>
               {product.options.map((option: Option) => (
                 <SelectItem key={option.id} value={option.id.toString()}>
-                  {option.size} ml (${parseFloat(option.price).toFixed(2)})
+                  {option.size} ml ({parseFloat(option.price).toFixed(2)}ُEGP)
                 </SelectItem>
               ))}
             </SelectContent>
@@ -129,7 +129,7 @@ export function AddToCart({ product, setAdded }: AddToCartProps) {
             className="w-full font-semibold mt-2 transition-all duration-300"
             size="lg"
           >
-        تسجيل الدخول اولا
+            تسجيل الدخول اولا
           </Button>
         </Link>
       )}

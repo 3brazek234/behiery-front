@@ -25,19 +25,20 @@ function SliderProducts({children}: {children: React.ReactNode}) {
             slidesPerGroup: 2
           },
           640: {
-            slidesPerView: 4,
-            slidesPerGroup: 4
+            slidesPerView: 3,
+            slidesPerGroup: 3
           },
           980: {
-            slidesPerView: 5,
-            slidesPerGroup: 5
+            slidesPerView: 3,
+            slidesPerGroup: 3
           },
           1280: {
-            slidesPerView: 6,
-            slidesPerGroup: 6
+            slidesPerView: 4,
+            slidesPerGroup: 4
           }
         }}
         className="categories-swiper"
+        
       >
         {children}
       </Swiper>

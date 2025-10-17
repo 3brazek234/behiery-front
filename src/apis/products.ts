@@ -4,6 +4,7 @@ import { Product } from '@/types/product'
 export const getProducts = async (url?: string) : Promise<Product[]> => {
   try {
     const res = await axiosApp.get(`${url || "/products"}`)
+
     return res?.data
   }
   catch (error) {

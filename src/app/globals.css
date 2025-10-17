@@ -70,3 +70,35 @@ body {
     @apply bg-background text-foreground;
   }
 }
+/* src/app/globals.css (أو ملف الـ CSS الرئيسي بتاعك) */
+
+/* ... أي CSS آخر عندك */
+
+/* Custom styles for product description HTML content */
+.product-description-content h2 {
+  @apply text-2xl font-bold mb-3 mt-6 text-orange-600 dark:text-orange-400;
+}
+
+.product-description-content h3 {
+  @apply text-xl font-semibold mb-2 mt-4 text-gray-800 dark:text-white;
+}
+
+.product-description-content ul {
+  @apply list-disc list-inside space-y-1 ml-4; /* ml-4 for indentation */
+}
+
+.product-description-content ul li {
+  @apply text-base;
+}
+
+.product-description-content p {
+  @apply mb-3;
+}
+
+/* عشان نضمن إن الـ dir="rtl" يشتغل بشكل كويس على الـ ul */
+.product-description-content ul[dir="rtl"] {
+  @apply list-inside; /* تأكد أن القائمة داخل العنصر وليست خارجه */
+  /* ممكن تحتاج هنا ضبط للـ padding-right لو عاوز تزود المسافة قبل الـ bullets */
+  padding-right: 1.5rem; /* مثال لضبط المسافة */
+  padding-left: 0;
+}

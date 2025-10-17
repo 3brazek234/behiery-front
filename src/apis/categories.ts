@@ -17,6 +17,7 @@ type Category = {
 export const getCategories = async (url?: string) : Promise<Category[]> => {
   try {
     const res = await axiosApp.get(`${url || "/categories"}`)
+    console.log(res?.data?.data)
     return res?.data?.data 
   }
   catch (error) {

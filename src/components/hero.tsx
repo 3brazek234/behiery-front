@@ -1,15 +1,40 @@
 import React from 'react'
-
+import bg from "../../public/fulvio-ciccolo-tSZO3qHhCM0-unsplash.jpg"
+import Image from 'next/image'
 export default function Hero() {
   return (
-    <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
-    <div className="mx-auto grid max-w-screen-xl px-4 pb-8 lg:gap-12 lg:pb-16 xl:gap-0">
-      <div className="content-center justify-self-center md:text-center">
-        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight dark:text-white md:max-w-2xl text-primary md:text-5xl xl:text-6xl">رحلتك مع العطور</h1>
-        <p className="mb-4 max-w-2xl text-gray-500 dark:text-gray-400 md:mb-12 md:text-lg lg:mb-5 lg:text-xl">اكتشف واستكشف واجمع العطور الفاخرة مع تطبيق Behiry Perfume - رفيقك المثالي في عالم العطور. تصفح آلاف الروائح، اقرأ المراجعات، وابحث عن عطرك المثالي.</p>
-        <a href="#" className="inline-block rounded-lg bg-primary-700 px-6 py-3.5 text-center font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Shop Now</a>
-      </div>    
-    </div>
+  <section className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] flex items-center justify-center text-center overflow-hidden">
+
+      <Image
+        src={bg.src} 
+        alt="Background for Perfume Shop"
+        fill
+        priority 
+        className="object-cover object-center transform scale-105" 
+      />
+      <div className="absolute inset-0 bg-black opacity-60"></div>
+
+      <div className="relative z-10 mx-auto max-w-screen-xl px-4 py-8 md:py-16 lg:py-24">
+        <div className="flex flex-col items-center justify-center"> 
+          <h1 className="mb-4 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight text-white drop-shadow-lg"> 
+            رحلتك مع <span className="text-orange-300">العطور الفاخرة</span> 
+          </h1>
+          <p className="mb-8 max-w-2xl text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-200 leading-relaxed drop-shadow-md"> {/* 🚨 حجم خط أكبر للنص ووصف أفضل للـ shadow */}
+            اكتشف، استكشف واجمع العطور الفاخرة مع تطبيق Behiry Perfume - رفيقك المثالي في عالم الروائح الساحرة.
+          </p>
+          
+          <a
+            href="/products" // 🚨 يفضل يكون رابط حقيقي لصفحة المنتجات
+            className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-orange-600 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300 transition-all duration-300 shadow-lg" // 🚨 زرار أكبر بلون برتقالي مميز و shadow
+          >
+            تسوق الآن
+            <svg className="w-4 h-4 rtl:rotate-180 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
     {/* <div className="mx-auto grid max-w-screen-xl grid-cols-2 gap-8 text-gray-500 dark:text-gray-400 sm:grid-cols-3 sm:gap-12 lg:grid-cols-6 px-4">
       <a href="#" className="flex items-center md:justify-center">
         <svg className="h-10 hover:text-gray-900 dark:hover:text-white" viewBox="0 0 106 48" fill="none" xmlns="http://www.w3.org/2000/svg">

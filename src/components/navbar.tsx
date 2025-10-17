@@ -3,12 +3,14 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { User, Search, Menu } from 'lucide-react'
+import { User, Search, Menu, X } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import {
@@ -23,11 +25,15 @@ import { CartIcon } from "./cartIcon"
 import Image from "next/image"
 import useUserStore from "@/store/user"
 import UserDropdown from "./UserDropdown"
+import { MobileNav } from "./MobileNav"
+// 🚨 استيراد MobileNav الجديد
+
 
 export function Navbar() {
-  const {user} = useUserStore()
+  const { user } = useUserStore()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // 🚨 حالة جديدة للتحكم في فتح الـ Sheet
   const router = useRouter()
 
   const handleSearch = (e: React.FormEvent) => {
@@ -39,107 +45,138 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex items-center justify-center">
-      <div className="container flex h-16 items-center">
-        <Sheet>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm">
+      <div className="container flex h-16 items-center px-4">
+        {/* Mobile Menu Button - 🚨 استخدم الحالة الجديدة هنا */}
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle Menu</span>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="md:hidden h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="القائمة"
+            >
+              <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="pr-0 pt-10">
-            <MobileNav />
+          <SheetContent side="right" className="w-56 sm:max-w-xs md:max-w-sm p-0 bg-gradient-to-br from-gray-50 to-white border-gray-200">
+            <SheetHeader className="p-4 border-b border-gray-200 bg-orange-400 text-white">
+              <SheetTitle className="text-xl font-semibold  text-white text-center flex items-center justify-center">
+                بحيري للعطور
+              </SheetTitle>
+            </SheetHeader>
+            <MobileNav closeSheet={() => setIsMobileMenuOpen(false)} />
           </SheetContent>
         </Sheet>
-        <Link href="/" className="mr-6 flex items-center gap-x-2">
-          <Image src="https://behiryperfume.com/images/logo.svg" alt="Logo" width={40} height={40} className="size-8" />
-          <span className="font-bold bg-gradient-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent hidden md:inline-block">
-          {/* Behiry Perfume – Official Online Store */}
-بحيري للعطور {"–"} المتجر الإلكتروني الرسمي
+
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-x-2 flex-shrink-0 me-auto md:me-0" aria-label="الرئيسية"> {/* 🚨 me-auto عشان يدفعه لليسار في الموبايل */}
+          <Image 
+            src="https://behiryperfume.com/images/logo.svg" 
+            alt="شعار بحيري للعطور" 
+            width={40} 
+            height={40} 
+            className="size-8 md:size-10" 
+            priority
+          />
+          <span className="font-bold bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent hidden md:inline-block text-lg">
+           بحيري للعطور – المتجر الإلكتروني الرسمي
+
           </span>
         </Link>
-        <div className="flex flex-1 items-center justify-end gap-x-4">
-          <nav className="flex items-center gap-x-2">
-            <MainNav className="hidden md:flex ps-10" />
-            <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="w-9 px-0">
-                  <Search className="h-4 w-4" />
-                  <span className="sr-only">بحث</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>بحث في المنتجات</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleSearch} className="grid gap-4 py-4">
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex flex-1 items-center justify-end gap-x-6">
+          <MainNav className="ps-10" />
+        </div>
+
+        {/* Icons */}
+        <div className="flex items-center gap-x-2 md:gap-x-3 ms-auto"> {/* 🚨 ms-auto عشان يدفعه لليمين في الديسكتوب */}
+          {/* Search */}
+          <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
+            <DialogTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="بحث"
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px] rounded-lg">
+              <DialogHeader>
+                <DialogTitle className="text-right">بحث في المنتجات</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSearch} className="grid gap-4 py-2">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="search"
-                    placeholder="بحث في المنتجات"
-                    className="col-span-3"
+                    placeholder="ابحث عن منتجات..."
+                    className="pl-10 pr-4 py-5 text-base"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    autoFocus
                   />
-                  <Button type="submit">بحث</Button>
-                </form>
-              </DialogContent>
-            </Dialog>
-            {user ? <UserDropdown /> :<Link href={'/login'}>
-              <Button variant="ghost" size="icon" className="w-9 px-0">
-                <User className="h-4 w-4" />
-                <span className="sr-only">الحساب</span>
-              </Button>
-            </Link>}
-            <Link href={'/cart'}>
-              <Button variant="ghost" size="icon" className="w-9 px-0">
-                <CartIcon />
-                <span className="sr-only">العربة</span>
+                </div>
+                <Button type="submit" className="w-full py-5">
+                  بحث
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+
+          {/* User Account */}
+          {user ? (
+            <UserDropdown />
+          ) : (
+            <Link href={'/login'} className="inline-flex">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="حسابي"
+              >
+                <User className="h-5 w-5" />
               </Button>
             </Link>
-          </nav>
+          )}
+
+          {/* Cart */}
+          <Link href={'/cart'} className="relative inline-flex">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 relative"
+              aria-label="سلة التسوق"
+            >
+              <CartIcon />
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
   )
 }
 
-function MobileNav() {
-  return (
-    <nav className="flex flex-col space-y-4 mt-6 px-4">
-      
-      <Link
-        href="/products"
-        className="text-sm font-medium py-3 transition-colors hover:text-primary"
-      >
-        العطور
-      </Link>
-       {/* <Link
-        href="/categories"
-        className="text-sm font-medium py-3 transition-colors hover:text-primary"
-      >
-        الفئات
-      </Link> */}
-       <Link
-        href="/cart"
-        className="text-sm font-medium py-3 transition-colors hover:text-primary"
-      >
-        السلة
-      </Link>
-      <Link
-        href="https://behiryperfume.com/about"
-        className="text-sm font-medium py-3 transition-colors hover:text-primary"
-      >
-      من نحن        
-      </Link>
-      <Link
-        href="https://behiryperfume.com/contact"
-        className="text-sm font-medium py-3 transition-colors hover:text-primary"
-      >
-        اتصل بنا
-
-      </Link>
-    </nav>
-  )
-}
-
+// 🚨 MainNav هنا عشان لو فيه لينكات تانية
+// function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
+//   return (
+//     <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>
+//       <Link
+//         href="/products"
+//         className="text-sm font-medium transition-colors hover:text-primary"
+//       >
+//         العطور
+//       </Link>
+//       <Link
+//         href="/best-sellers"
+//         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+//       >
+//         الأكثر مبيعا
+//       </Link>
+//       {/* ... أي روابط أخرى للـ Desktop Nav */}
+//     </nav>
+//   );
+// }
