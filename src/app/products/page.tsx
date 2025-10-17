@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, Suspense } from "react"; // 🚨 إضافة Suspense
 import { useSearchParams } from "next/navigation";
 import { Filter } from "@/components/product-filters";
 import { PaginatedProducts } from "@/components/PaginatedProducts";
 import { getProducts } from "@/apis/products";
 import { Product, Category, Type } from "@/types/product";
 
-export default function ProductsPage() {
-  const searchParams = useSearchParams();
+// 🚨 عملت Component داخلي عشان نلفه بـ Suspense (دا حل if all else fails)
+function ProductsContent() {
+  const searchParams = useSearchParams(); // 🚨 useSearchParams هنا
+
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -37,7 +39,7 @@ export default function ProductsPage() {
 
         setAllProducts(products);
 
-         console.log(products, "products");
+        console.log(products, "products");
         // Extract unique categories and types
         const uniqueCategories = Array.from(
           new Map(
@@ -121,7 +123,7 @@ export default function ProductsPage() {
     maxPrice,
     searchQuery,
   ]);
-  
+
   // Pagination logic
   const paginatedProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -166,5 +168,18 @@ export default function ProductsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// 🚨 الـ Page component يلف الـ Content component بـ Suspense
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+        <div className="container mx-auto py-8 flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      }>
+      <ProductsContent /> {/* 🚨 هنا بنستخدم الـ component الجديد */}
+    </Suspense>
   );
 }
