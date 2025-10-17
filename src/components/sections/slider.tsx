@@ -22,11 +22,11 @@ function SliderProducts({children}: {children: React.ReactNode}) {
        breakpoints={{
           320: {
             slidesPerView: 2,
-            slidesPerGroup: 2
+            slidesPerGroup: 1
           },
           640: {
-            slidesPerView: 3,
-            slidesPerGroup: 3
+            slidesPerView: 2,
+            slidesPerGroup: 2
           },
           980: {
             slidesPerView: 3,

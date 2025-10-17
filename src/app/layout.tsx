@@ -4,6 +4,7 @@ import { Tajawal } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import AutoStart from "@/components/auto-start";
 import {Toaster} from "react-hot-toast"
+import { Footer } from "@/components/Footer";
 
 const poppins = Tajawal({
   subsets: ["latin"],
@@ -30,10 +31,7 @@ export default function RootLayout({
         <AutoStart />
         <Navbar />
         {children}
-        <div className="flex bg-gray-100 flex-col items-center py-6 justify-center">
-          <p>© 2025 Behiry Tech. جميع الحقوق محفوظة.</p>
-          <p className="app-version">الإصدار 1.0.0</p>
-        </div>
+        <Footer/>
       </body>
     </html>
   );

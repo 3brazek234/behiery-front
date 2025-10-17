@@ -49,7 +49,7 @@ export function ProductCard({
     };
   }, []);
   return (
-    <Card className="flex flex-col justify-between overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white dark:bg-gray-800 rounded-xl">
+    <Card className="relative flex flex-col justify-between overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white dark:bg-gray-800 rounded-xl">
       <CardContent className={`p-0 !h-[${height}px]`}>
         <div className="aspect-[4/3] relative overflow-hidden">
           <Image
@@ -111,16 +111,28 @@ export function ProductCard({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-1 mb-2">
             {salePrice ? (
-              <>
+              <div className="">
                 <p className="text-lg md:text-xl font-bold text-red-600 dark:text-red-400">
                   {salePrice} ج.م
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 line-through">
+                <Badge
+                  className="
+                 absolute top-0 right-0 transform -translate-x-0 -translate-y-0 
+                 bg-gradient-to-br from-red-600 to-red-800 text-white 
+                 font-thin md:font-semibold text-xs md:text-sm px-1 md:px-2 py-1 md:py-1.5
+                 rounded-bl-xl shadow-lg z-10 
+                 line-through 
+
+  "
+                >
                   {price}
-                </p>
-              </>
+                </Badge>
+                <Badge className="hidden md:block absolute top-0 left-0 transform translate-x-0 translate-y-0 py-1 md:py-1.5 px-1 md:px-2">
+                  خصم خاص
+                </Badge>
+              </div>
             ) : (
               <p className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
                 {price} ج.م
