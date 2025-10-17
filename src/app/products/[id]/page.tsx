@@ -63,7 +63,7 @@ export default async function ProductPage({
 
                 <p className="text-3xl font-bold text-primary">
                   {product.options[0]?.price
-                    ? `${parseFloat(product.options[0].price).toFixed(2)} ر.س`
+                    ? `${parseFloat(product.options[0].price).toFixed(2)} جنيه`
                     : "غير متاح"}
                 </p>
               </div>
