@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, ShoppingCart, Check, Eye } from "lucide-react";
 import { Product } from "@/types/product";
-import { useCart } from "@/store/cartStore";
 import { AddToCart } from "./AddToCart";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 // ''''''

@@ -1,5 +1,5 @@
 import axiosApp from "@/lib/axios"
-import { Product } from '@/types/product'
+import { Product, ProductSales } from '@/types/product'
 
 export const getProducts = async (url?: string) : Promise<Product[]> => {
   try {
@@ -44,5 +44,19 @@ export const getProductByID = async (id: number|string) : Promise<Product|null> 
   catch (error) {
     console.error('Error fetching product:', error)
     return null
+  }
+}
+
+export const getProductsSales = async () : Promise<ProductSales> => {
+  try {
+    const res = await axiosApp.get(`/products/sales`)
+    return res?.data
+  }
+  catch (error) {
+    console.error('Error fetching product:', error)
+    return {
+      message: 'Error fetching product',
+      data: []
+    }
   }
 }

@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 import { getProductByID } from "@/apis/products";
 import { ReviewsView } from "@/components/Reviews";
 import { AddToCart } from "@/components/AddToCart";
+import { Badge } from "@/components/ui/badge";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,10 @@ export default async function ProductPage({
 
   const descriptionHtml = { __html: product.description.ar };
   const averageRating = parseFloat(product.rate);
-  console.log(product);
+  const price = parseFloat(product.options[0]?.price || "0").toFixed(2);
+  const salePrice = product.options[0]?.sale_price
+    ? parseFloat(product.options[0].sale_price).toFixed(2)
+    : null;
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/10 py-12">
       <div className="container mx-auto px-4 max-w-6xl">
@@ -36,6 +40,35 @@ export default async function ProductPage({
                 className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                 priority
               />
+
+              <div className="flex items-center gap-1 mb-2">
+                {salePrice ? (
+                  <div className="">
+                    <p className="text-lg md:text-xl font-bold text-red-600 dark:text-red-400">
+                      {salePrice} ج.م
+                    </p>
+                    <Badge
+                      className="
+                 absolute top-0 right-0 transform -translate-x-0 -translate-y-0 
+                 bg-gradient-to-br from-red-600 to-red-800 text-white 
+                 font-thin md:font-semibold text-xs md:text-sm px-1 md:px-2 py-1 md:py-1.5
+                 rounded-bl-xl shadow-lg z-10 
+                 line-through 
+
+  "
+                    >
+                      {price}
+                    </Badge>
+                    <Badge className="hidden md:block absolute top-0 left-0 transform translate-x-0 translate-y-0 py-1 md:py-1.5 px-1 md:px-2">
+                      خصم خاص
+                    </Badge>
+                  </div>
+                ) : (
+                  <p className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
+                    {price} ج.م
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Product Info */}
@@ -62,7 +95,9 @@ export default async function ProductPage({
                 </div>
 
                 <p className="text-3xl font-bold text-primary">
-                  {product.options[0]?.price
+                  {salePrice
+                    ? `${parseFloat(salePrice).toFixed(2)} جنيه`
+                    : product.options[0]?.price
                     ? `${parseFloat(product.options[0].price).toFixed(2)} جنيه`
                     : "غير متاح"}
                 </p>

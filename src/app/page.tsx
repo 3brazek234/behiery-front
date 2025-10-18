@@ -1,4 +1,5 @@
 import { getProducts } from "@/apis/products";
+import Discounts from "@/components/Discounts";
 import Hero from "@/components/hero";
 // import CategoriesSection from "@/components/sections/CategoriesSection";
 import ProductSection from "@/components/sections/productsSection";
@@ -23,13 +24,8 @@ export default async function Home() {
           linkAll="/products?best=best-seller"         
         />
       )}
-      {productsSales && productsSales?.length > 0 && (
-        <ProductSection
-          products={productsSales}
-          title="الاكثر مبيعا"
-          linkAll="/products?sales=sales"
-        />
-      )}
+      <Discounts />
+
       {products && products?.length > 0 && (
         <ProductSection
           products={products}

@@ -41,7 +41,9 @@ export interface  Option {
   quantity: number | null;
   sale_price: string | null;
   sale_percentage: string | null;
+  discount_percentage: Number | null;
   wholesale_price: string | null;
+  original_price: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -104,4 +106,9 @@ export interface  Product {
   options: Option[];
   categories: Category[];
   reviews: Review[];
+}
+
+export interface  ProductSales {
+  message: string;
+  data: Product[];
 }

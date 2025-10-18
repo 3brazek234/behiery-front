@@ -9,6 +9,8 @@ import { ProductCard } from "../product-card";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
+import SubTitle from "../SubTitle";
+import HomeCards from "../HomeCards";
 
 const SliderProducts = dynamic(() => import("./slider"), {
   ssr: false,
@@ -41,9 +43,7 @@ export default function ProductSection({
           )}
         >
           {title && (
-            <h2 className="text-lg sm:text-2xl md:text-3xl flex pb-2 gap-x-2">
-              <span className="text-primary">{title}</span>
-            </h2>
+       <SubTitle title={title} />
           )}
           {linkAll && (
             <Link href={linkAll}>
