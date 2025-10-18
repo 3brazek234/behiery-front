@@ -80,8 +80,8 @@ export function MobileNav({ closeSheet }: MobileNavProps) {
       <div className="flex flex-col py-2">
         {user && (
           <>
-            <NavLink href="/profile" icon={<Settings className="size-5" />} label="إعدادات الحساب" onClick={closeSheet} />
-            <NavLink href="/favorites" icon={<Heart className="size-5" />} label="المفضلة" onClick={closeSheet} />
+            {/* <NavLink href="/profile" icon={<Settings className="size-5" />} label="إعدادات الحساب" onClick={closeSheet} />
+            <NavLink href="/favorites" icon={<Heart className="size-5" />} label="المفضلة" onClick={closeSheet} /> */}
             <Button variant="ghost" onClick={handleLogout} className="flex justify-start items-center gap-3 px-6 py-4 text-base font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors">
               <LogOut className="size-5" />
               <span>تسجيل الخروج</span>

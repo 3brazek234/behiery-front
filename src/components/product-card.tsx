@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -30,23 +30,23 @@ export function ProductCard({
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   };
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
   const averageRating = parseFloat(product.rate);
   const price = parseFloat(product.options[0]?.price || "0").toFixed(2);
   const salePrice = product.options[0]?.sale_price
     ? parseFloat(product.options[0].sale_price).toFixed(2)
     : null;
 
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-    return () => {
-      window.removeEventListener("resize", checkIsMobile);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const checkIsMobile = () => {
+  //     setIsMobile(window.innerWidth < 425);
+  //   };
+  //   checkIsMobile();
+  //   window.addEventListener("resize", checkIsMobile);
+  //   return () => {
+  //     window.removeEventListener("resize", checkIsMobile);
+  //   };
+  // }, []);
   return (
     <Card className="relative flex flex-col justify-between overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white dark:bg-gray-800 rounded-xl">
       <CardContent className={`p-0 !h-[${height}px]`}>
@@ -139,7 +139,7 @@ export function ProductCard({
             )}
           </div>
 
-          <div className="flex flex-wrap gap-1">
+          {/* <div className="flex flex-wrap gap-1 overflow-x-hidden">
             {product.types?.length > 0 && isMobile ? (
               <div className="flex gap-2">
                 {product.types?.slice(0, 3).map((type) => (
@@ -163,7 +163,7 @@ export function ProductCard({
                 </Badge>
               ))
             )}
-          </div>
+          </div> */}
         </div>
       </CardContent>
 
