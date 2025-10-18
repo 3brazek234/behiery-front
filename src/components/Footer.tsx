@@ -68,7 +68,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/best-sellers"
+                  href="/products"
                   className="text-gray-600 dark:text-gray-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
                 >
                   الأكثر مبيعاً
@@ -76,7 +76,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="https://behiryperfume.com/about"
+                     href="https://behiryperfume.com/about"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 dark:text-gray-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
@@ -86,7 +86,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="https://behiryperfume.com/contact"
+                       href="https://behiryperfume.com/contact"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 dark:text-gray-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
@@ -105,7 +105,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center justify-center md:justify-start gap-2 text-gray-600 dark:text-gray-400">
                 <MapPin className="size-4 text-orange-500" />
-                <span>شارع رئيسي، مدينة العطور، مصر</span>
+                <span>شارع 45، العصافرة بحري الإسكندرية، مصر</span>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-2 text-gray-600 dark:text-gray-400">
                 <Phone className="size-4 text-orange-500" />
@@ -113,7 +113,7 @@ export function Footer() {
               </li>
               <li className="flex items-center justify-center md:justify-start gap-2 text-gray-600 dark:text-gray-400">
                 <Mail className="size-4 text-orange-500" />
-                <span>info@behiryperfume.com</span>
+                <span>behiryperfume@gmail.com</span>
               </li>
             </ul>
             {/* Social Media Links */}
@@ -163,20 +163,8 @@ export function Footer() {
 
         {/* Bottom Section: Copyright */}
         <div className="text-center mt-6 text-gray-500 dark:text-gray-400 text-sm">
-          <p>
-            &copy; {new Date().getFullYear()} بحيري للعطور. جميع الحقوق محفوظة.
-          </p>
-          <p className="mt-2">
-            مصمم بحب بواسطة{" "}
-            <a
-              href="https://your-portfolio-link.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-orange-500"
-            >
-              اسم المصمم
-            </a>
-          </p>
+          <p>  جميع الحقوق محفوظة ©{new Date().getFullYear()} Behiry Tech.</p>
+          <p>الإصدار 1.0.0</p>
         </div>
       </div>
     </footer>

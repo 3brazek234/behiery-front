@@ -51,6 +51,7 @@ export function AddToCart({ product, setAdded }: AddToCartProps) {
       setIsAdded(false);
     }, 2000);
   };
+  const salePrice = product.options[0]?.sale_price
 
   return (
     <div className="space-y-4">
@@ -67,7 +68,7 @@ export function AddToCart({ product, setAdded }: AddToCartProps) {
             <SelectContent>
               {product.options.map((option: Option) => (
                 <SelectItem key={option.id} value={option.id.toString()}>
-                  {option.size} ml ({parseFloat(option.price).toFixed(2)}ُEGP)
+                  {option.size} ml ({salePrice ? parseFloat(salePrice) : parseFloat(option.price)} EGP)
                 </SelectItem>
               ))}
             </SelectContent>
