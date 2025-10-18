@@ -261,40 +261,6 @@ export default function CheckoutAddressPage() {
                 </div>
               </div>
 
-              {/* <FormField
-              control={form.control}
-              name="remember"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>تذكر العنوان</FormLabel>
-                  <div className='flex items-center gap-2'>
-                    <FormControl>
-                      <Input className='!size-4' type="checkbox"
-            {...field} disabled={loading} />
-                    </FormControl>
-                      <span>تذكر العنوان</span>
-                  </div>
-                </FormItem>
-              )}
-            /> */}
-
-              <div className="flex items-center justify-end gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => form.reset()}
-                  disabled={loading}
-                >
-                  إعادة تعيين
-                </Button>
-                <Button type="submit" disabled={loading}>
-                  {loading ? "جارٍ تأكيد الطلب..." : "تأكيد الطلب"}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        )}
-      </div>
       <div className="w-full max-w-md">
         <div className="bg-primary/5 p-6 rounded-lg">
           <h2 className="text-xl font-semibold mb-4">ملخص الطلب</h2>
@@ -347,6 +313,24 @@ export default function CheckoutAddressPage() {
           )}
         </div>
       </div>
+              <div className="flex items-center justify-end gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => form.reset()}
+                  disabled={loading}
+                >
+                  إعادة تعيين
+                </Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? "جارٍ تأكيد الطلب..." : "تأكيد الطلب"}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        )}
+      </div>
+
     </div>
   );
 }
