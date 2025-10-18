@@ -82,6 +82,8 @@ export const products: Product[] = [
         "sale_price": null,
         "sale_percentage": null,
         "wholesale_price": null,
+        "discount_percentage": null,
+        "original_price": null,
         "created_at": "2025-07-15T21:22:47.000000Z",
         "updated_at": "2025-08-13T14:46:35.000000Z"
       }
