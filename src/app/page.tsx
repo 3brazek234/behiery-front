@@ -8,7 +8,6 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const productsBestSeller = await getProducts("/products/best-seller");
-  const { data: productsSales } = (await getProducts("/products/sales")) as any;
   const products = await getProducts();
 
   return (
