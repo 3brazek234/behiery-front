@@ -17,7 +17,7 @@ export default function CartPage() {
   const { items, total, toggleFetch } = useCart();
   const { putData } = UsePut();
   const { deleteData } = useDelete();
-
+  console.log(items);
   // تخزين الكميات لكل منتج بالـ id
   const [quantities, setQuantities] = useState<{ [key: number]: number }>(
     items.reduce((acc: Record<number, number>, item) => {
@@ -96,7 +96,7 @@ export default function CartPage() {
                 </h2>
                 <div className="md:space-y-2 grid md:grid-cols-2 text-sm">
                   <p className="text-gray-600">الحجم : {item?.option?.size}</p>
-                  <p className="text-gray-600">السعر : {item?.option?.price}</p>
+                  <p className="text-gray-600">السعر : {item?.option?.sale_price || item?.option?.price} جنيه</p>
                   <p className="text-gray-600">الكمية : {item?.quantity}</p>
                   <p className="text-gray-600">اجمالي : {item?.price} جنيه</p>
                 </div>

@@ -59,7 +59,7 @@ export function Navbar() {
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-56 sm:max-w-xs md:max-w-sm p-0 bg-gradient-to-br from-gray-50 to-white border-gray-200">
+          <SheetContent side="right" className="w-64 sm:max-w-xs md:max-w-sm p-0 bg-gradient-to-br from-gray-50 to-white border-gray-200">
             <SheetHeader className="p-4 border-b border-gray-200 bg-orange-400 text-white">
               <SheetTitle className="text-xl font-semibold  text-white text-center flex items-center justify-center">
                 بحيري للعطور

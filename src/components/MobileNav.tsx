@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-import { Home, ShoppingBag, Info, Phone, Heart, Settings, LogIn, LogOut, User } from 'lucide-react' // أيقونات جديدة
+import { Home, ShoppingBag, Info, Phone, Heart, Settings, LogIn, LogOut, User, Package, Package2 } from 'lucide-react' // أيقونات جديدة
 import useUserStore from "@/store/user" // لو بتستخدمها هنا برضه
 import { Button } from "@/components/ui/button"
 import { DropdownMenuSeparator } from "./ui/dropdown-menu"
@@ -17,9 +17,9 @@ export function MobileNav({ closeSheet }: MobileNavProps) {
   const { user, logout } = useUserStore(); // 🚨 لو بتستخدم state الـ user هنا
 
   const handleLogout = () => {
-    logout(); // دالة تسجيل الخروج من الـ store
-    closeSheet(); // إغلاق الـ Sheet
-    router.push('/'); // الرجوع للصفحة الرئيسية
+    logout(); 
+    closeSheet(); 
+    router.push('/'); 
   };
 
   return (
@@ -33,7 +33,6 @@ export function MobileNav({ closeSheet }: MobileNavProps) {
             </div>
             <div className="flex-grow">
               <p className="font-semibold text-gray-800 dark:text-white">أهلاً، {user.name || "مستخدم"}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{user.email}</p>
             </div>
             <Button variant="ghost" size="icon" onClick={handleLogout} className="text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400" aria-label="تسجيل الخروج">
               <LogOut className="h-5 w-5" />
@@ -51,9 +50,9 @@ export function MobileNav({ closeSheet }: MobileNavProps) {
       {/* Main Links */}
       <div className="flex flex-col py-2">
         <NavLink href="/" icon={<Home className="size-5" />} label="الرئيسية" onClick={closeSheet} />
-        <NavLink href="/products" icon={<ShoppingBag className="size-5" />} label="جميع المنتجات" onClick={closeSheet} />
+        <NavLink href="/products" icon={<Package className="size-5" />} label="جميع المنتجات" onClick={closeSheet} />
         <NavLink href="/cart" icon={<ShoppingBag className="size-5" />} label="سلة التسوق" onClick={closeSheet} />
-        
+        <NavLink href="/most-sold" icon={<Package2 className="size-5" />} label="الأكثر مبيعا" onClick={closeSheet} />
         {/* Accordion for Categories/Types (Optional - if you want nested links) */}
         {/* <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
