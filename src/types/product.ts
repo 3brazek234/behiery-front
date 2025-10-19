@@ -80,8 +80,8 @@ export interface  Review {
   user_name: string;
   user: User;
 }
-
-export interface  Product {
+ 
+export interface Product {
   id: number;
   name: Name;
   description: Description;
@@ -107,6 +107,41 @@ export interface  Product {
   categories: Category[];
   reviews: Review[];
 }
+
+// ده الـ type للـ metadata اللي جوه "products" object
+export interface ProductsPaginationMeta {
+  current_page: number;
+  data: Product[]; // 🚨 دي الـ array بتاعة المنتجات
+  first_page_url: string;
+  from: number;
+  last_page: number; // 🚨 ده عدد الصفحات الكلي
+  last_page_url: string;
+  links: any[]; // ممكن تعرف type أفضل للـ links
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number; // 🚨 ده إجمالي عدد المنتجات
+}
+
+// ده الـ type للـ "data" object اللي جوه الـ API response
+export interface ApiResponseData {
+  products: ProductsPaginationMeta;
+}
+
+// ده الـ type للـ API response الكامل
+export interface FullApiResponse {
+  success: boolean;
+  data: ApiResponseData;
+}
+
+export interface ProcessedProductsResponse {
+  products: Product[];
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+} 
 
 export interface  ProductSales {
   message: string;

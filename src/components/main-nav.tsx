@@ -19,12 +19,12 @@ export function MainNav({
         العطور
       </Link>
       
-       {/* <Link
-        href="/categories"
+       <Link
+        href="/most-sold"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        الفئات
-      </Link> */}
+        الأكثر مبيعا
+      </Link>
   
 
       <Link

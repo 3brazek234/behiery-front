@@ -1,185 +1,116 @@
-"use client";
+// app/products/page.tsx
 
-import { useEffect, useState, useMemo, Suspense } from "react"; // 🚨 إضافة Suspense
-import { useSearchParams } from "next/navigation";
-import { Filter } from "@/components/product-filters";
-import { PaginatedProducts } from "@/components/PaginatedProducts";
-import { getProducts } from "@/apis/products";
-import { Product, Category, Type } from "@/types/product";
+import { getProductNew } from "@/apis/products";
+import Image from "next/image";
+import Link from "next/link";
+import { Suspense } from "react";
+import { FilterControls } from "@/components/product-filters";
+import { PaginationControls } from "@/components/PaginatedProducts";
+import { ProcessedProductsResponse } from "@/types/product"; // 🚨 استيراد الـ type الجديد
+import { ProductCard } from "@/components/product-card";
+import SubTitle from "@/components/SubTitle";
 
-// 🚨 عملت Component داخلي عشان نلفه بـ Suspense (دا حل if all else fails)
-function ProductsContent() {
-  const searchParams = useSearchParams(); // 🚨 useSearchParams هنا
+interface ProductsPageProps {
+  searchParams: {
+    page?: string;
+    limit?: string;
+    category_id?: string;
+    gender?: "men" | "women" | "unisex";
+    min_price?: string;
+    max_price?: string;
+    sort?: string;
+  };
+}
 
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [types, setTypes] = useState<Type[]>([]);
+export default async function ProductsPage({
+  searchParams,
+}: ProductsPageProps) {
+  const searchParamsAwaited = await searchParams; // 🚨 التأكد من await
+  const currentPage = parseInt(searchParamsAwaited.page || "1", 10);
+  const limit = parseInt(searchParamsAwaited.limit || "12", 10);
 
-  // Get filter values from URL
-  const bestSeller = searchParams.get("best") === "best-seller";
-  const sales = searchParams.get("sales") === "best-seller";
-  const categoryId = searchParams.get("category_id") || "";
-  const gender = searchParams.get("gender") || "";
-  const typeId = searchParams.get("type") || "";
-  const searchQuery = searchParams.get("search") || "";
-  const minPrice = parseFloat(searchParams.get("min_price") || "300");
-  const maxPrice = parseFloat(searchParams.get("max_price") || "2000");
-  const currentPage = parseInt(searchParams.get("page") || "1", 10);
-  const itemsPerPage = 12;
-
-  // Fetch all products on component mount
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const products = bestSeller
-          ? await getProducts("/products/best-seller")
-          : await getProducts();
-
-        setAllProducts(products);
-
-        console.log(products, "products");
-        // Extract unique categories and types
-        const uniqueCategories = Array.from(
-          new Map(
-            products.flatMap((p) => p?.categories || []).map((c) => [c.id, c])
-          ).values()
-        );
-
-        const uniqueTypes = Array.from(
-          new Map(
-            products.flatMap((p) => p.types || []).map((t) => [t?.id, t])
-          ).values()
-        );
-
-        setCategories(uniqueCategories);
-        setTypes(uniqueTypes);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [bestSeller]);
-
-  // Filter products based on search params
-  const filteredProducts = useMemo(() => {
-    return allProducts.filter((product) => {
-      // Filter by category
-      if (
-        categoryId &&
-        !product.categories?.some((cat) => cat.id.toString() === categoryId)
-      ) {
-        return false;
-      }
-
-      // Filter by gender
-      if (gender && product.gender !== gender) {
-        return false;
-      }
-
-      // Filter by type
-      if (
-        typeId &&
-        !product.types.some((type) => type.id.toString() === typeId)
-      ) {
-        return false;
-      }
-
-      // Filter by price range
-      if (
-        Number(product.options[0]?.price) < minPrice ||
-        Number(product.options[0]?.price) > maxPrice
-      ) {
-        return false;
-      }
-
-      // Filter by search query
-      if (searchQuery) {
-        const searchLower = searchQuery.toLowerCase();
-        const matchesName =
-          product.name?.ar?.toLowerCase().includes(searchLower) ||
-          product.name?.en?.toLowerCase().includes(searchLower);
-        const matchesDescription =
-          product.description?.ar?.toLowerCase().includes(searchLower) ||
-          product.description?.en?.toLowerCase().includes(searchLower);
-
-        if (!matchesName && !matchesDescription) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-  }, [
-    allProducts,
-    categoryId,
-    gender,
-    typeId,
-    minPrice,
-    maxPrice,
-    searchQuery,
-  ]);
-
-  // Pagination logic
-  const paginatedProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredProducts.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredProducts, currentPage]);
-
-  const pagination = {
-    total: filteredProducts.length,
-    per_page: itemsPerPage,
-    current_page: currentPage,
-    last_page: Math.ceil(filteredProducts.length / itemsPerPage),
+  const fetchOptions = {
+    page: currentPage,
+    limit: limit,
+    category_id: searchParamsAwaited.category_id,
+    gender: searchParamsAwaited.gender,
+    min_price: searchParamsAwaited.min_price
+      ? parseFloat(searchParamsAwaited.min_price)
+      : undefined,
+    max_price: searchParamsAwaited.max_price
+      ? parseFloat(searchParamsAwaited.max_price)
+      : undefined,
+    sort: searchParamsAwaited.sort,
   };
 
-  if (loading) {
+  let productsData: ProcessedProductsResponse; // 🚨 الـ type الصحيح هنا
+  let error: string | null = null;
+
+  try {
+    productsData = await getProductNew(fetchOptions);
+    console.log(productsData, "sdhfjhsdf"); // هتلاقي الداتا منظمة هنا
+  } catch (e) {
+    error = (e as Error).message;
+    // 🚨 لازم الـ default object يكون مطابق للـ type بتاع ProcessedProductsResponse
+    productsData = {
+      products: [],
+      totalItems: 0,
+      totalPages: 1,
+      currentPage: 1,
+    };
+  }
+
+  if (error) {
     return (
-      <div className="container mx-auto py-8 flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="container mx-auto py-8 text-center text-red-600">
+        <h1 className="text-3xl font-bold mb-4">خطأ في جلب المنتجات</h1>
+        <p>{error}</p>
+        <p>يرجى المحاولة لاحقاً.</p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8 text-primary">
-        {bestSeller ? "الاكثر مبيعا" : sales ? "البيعات" : "عطور بحيري"}
-      </h1>
-      <div className="flex flex-col-reverse lg:flex-row gap-8">
-        {/* Filter section */}
-        {!bestSeller && !sales && (
-          <div className="lg:w-1/6 order-1 lg:order-none">
-            <Filter categories={categories} types={types} />
-          </div>
-        )}
+    <div className="mx-10 py-8">
+      <div className="flex flex-col mb-12">
+        <SubTitle title="كل العطور" />
+      </div>
 
-        {/* Products section */}
-        <div className="flex-1">
-          <PaginatedProducts
-            products={paginatedProducts}
-            pagination={pagination}
-            currentPage={currentPage}
-          />
+      <Suspense
+        fallback={
+          <div className="mx-auto py-8 flex justify-center items-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        }
+      >
+        <div className="flex flex-col-reverse lg:flex-row gap-6">
+          <div className="order-1 lg:order-none">
+            <FilterControls currentSearchParams={searchParamsAwaited} />
+          </div>
+          <div className="flex-1">
+            {/* 🚨 هنا هتستخدم productsData.products.length */}
+            {productsData.products.length === 0 ? (
+              <p className="text-center text-gray-600 dark:text-gray-400">
+                لا توجد منتجات مطابقة لمعايير البحث.
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* 🚨 هنا هتستخدم productsData.products.map */}
+                {productsData.products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
+      </Suspense>
+
+      <div className="mt-10">
+        <PaginationControls
+          currentPage={productsData.currentPage}
+          totalPages={productsData.totalPages} // 🚨 تم الإصلاح هنا
+        />
       </div>
     </div>
-  );
-}
-
-// 🚨 الـ Page component يلف الـ Content component بـ Suspense
-export default function ProductsPage() {
-  return (
-    <Suspense fallback={
-        <div className="container mx-auto py-8 flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        </div>
-      }>
-      <ProductsContent /> {/* 🚨 هنا بنستخدم الـ component الجديد */}
-    </Suspense>
   );
 }

@@ -78,8 +78,11 @@ export default function CartPage() {
       <h1 className="text-3xl font-bold mb-8 text-primary">السلة</h1>
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2 space-y-4">
-          {items.map((item: any) => (
-            <div
+          {items.map((item: any) => {
+            const price = parseFloat(item.product.options[0]?.price || "0").toFixed(2);
+            const salePrice = item.product.options[0]?.sale_price
+            return (
+                <div
               key={item.id}
               className="flex flex-wrap items-center gap-4 border pb-4 px-2"
             >
@@ -96,7 +99,7 @@ export default function CartPage() {
                 </h2>
                 <div className="md:space-y-2 grid md:grid-cols-2 text-sm">
                   <p className="text-gray-600">الحجم : {item?.option?.size}</p>
-                  <p className="text-gray-600">السعر : {item?.option?.price}</p>
+                  <p className="text-gray-600">السعر : {salePrice || price} جنيه</p>
                   <p className="text-gray-600">الكمية : {item?.quantity}</p>
                   <p className="text-gray-600">اجمالي : {item?.price} جنيه</p>
                 </div>
@@ -106,7 +109,7 @@ export default function CartPage() {
                     defaultChecked={item.is_gift === 1}
                     onCheckedChange={(e) =>
                       updateCart({ id: item.id, is_gift: e ? 1 : 0 })
-                    }
+                    }   
                   />
                   <Label htmlFor={`gift-${item.id}`}>تحب/ي يكون هدية</Label>
                 </div>
@@ -174,7 +177,7 @@ export default function CartPage() {
                 </Button>
               </div>
             </div>
-          ))}
+          )})}
         </div>
         <div className="md:col-span-1">
           <div className="bg-gray-100 p-6 rounded-lg">

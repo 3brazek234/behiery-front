@@ -20,7 +20,7 @@ export default async function Home() {
         <ProductSection
           products={productsBestSeller}
           title="الاكثر مبيعا"
-          linkAll="/products?best=best-seller"         
+          linkAll="/most-sold"         
         />
       )}
       <Discounts />

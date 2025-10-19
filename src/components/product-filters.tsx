@@ -1,156 +1,168 @@
-'use client'
+// src/components/FilterControls.tsx
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { Slider } from '@/components/ui/slider'
-import { Label } from '@/components/ui/label'
-import { Category, Type } from '@/types/product'
+import axiosApp from "@/lib/axios";
+import { Category } from "@/types/product";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 
-interface FilterProps {
-  categories: Category[]
-  types: Type[]
+interface FilterControlsProps {
+  currentSearchParams: {
+    category_id?: string;
+    gender?: "men" | "women" | "unisex";
+    min_price?: string;
+    max_price?: string;
+    sort?: string;
+  };
 }
 
-export function Filter({ categories, types }: FilterProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-
-  const [categoryId, setCategoryId] = useState<string>(searchParams.get('category_id') || '')
-  const [bestSeller] = useState<string>(searchParams.get('best') || '')
-  const [sales] = useState<string>(searchParams.get('sales') || '')
-  const [gender, setGender] = useState<string>(searchParams.get('gender') || '')
-  const [typeId, setTypeId] = useState<string>(searchParams.get('type') || '')
-  const [search, setSearch] = useState<string>(searchParams.get('search') || '')
-  const [priceRange, setPriceRange] = useState<number[]>([
-    parseFloat(searchParams.get('min_price') || '300'),
-    parseFloat(searchParams.get('max_price') || '2000'),
-  ])
-
-  const updateFilters = () => {
-    const params = new URLSearchParams()
-
-    if (categoryId) params.set('category_id', categoryId)
-    if (bestSeller) params.set('best', bestSeller)
-    if (sales) params.set('sales', sales)
-    if (gender) params.set('gender', gender)
-    if (typeId) params.set('type', typeId)
-    if (search) params.set('search', search)
-    if (priceRange[0] > 300) params.set('min_price', priceRange[0].toString())
-    if (priceRange[1] < 1999) params.set('max_price', priceRange[1].toString())
-
-    router.push(`?${params.toString()}`, { scroll: false })
-  }
-
+export function FilterControls({ currentSearchParams }: FilterControlsProps) {
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const searchParams = useSearchParams();
   useEffect(() => {
-    updateFilters()
-  }, [categoryId, gender, typeId, search, priceRange])
+    async function getCategory() {
+      const res = await fetch("https://test.behiryperfume.com/api/categories");
+      const data = await res.json();
+      console.log(data, "res.data");
+      setCategories(data.data);
+    }
+    getCategory();
+  }, []);
+  const [categoryId, setCategoryId] = useState(
+    currentSearchParams.category_id || ""
+  );
+  const [gender, setGender] = useState(currentSearchParams.gender || "");
+  const [minPrice, setMinPrice] = useState(currentSearchParams.min_price || "");
+  const [maxPrice, setMaxPrice] = useState(currentSearchParams.max_price || "");
+  const [sort, setSort] = useState(currentSearchParams.sort || "");
+  useEffect(() => {
+    setCategoryId(currentSearchParams.category_id || "");
+    setGender(currentSearchParams.gender || "");
+    setMinPrice(currentSearchParams.min_price || "");
+    setMaxPrice(currentSearchParams.max_price || "");
+  }, [currentSearchParams]);
 
-  return (!bestSeller || !sales) && (
-    <div className="space-y-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">الفلاتر</h2>
+  const applyFilters = () => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    if (categoryId) newParams.set("category_id", categoryId);
+    else newParams.delete("category_id");
+    if (gender) newParams.set("gender", gender);
+    else newParams.delete("gender");
+    if (minPrice) newParams.set("min_price", minPrice);
+    else newParams.delete("min_price");
+    if (maxPrice) newParams.set("max_price", maxPrice);
+    else newParams.delete("max_price");
+    if (sort) newParams.set("sort", sort);
+    else newParams.delete("sort");
+    newParams.set("page", "1");
+    router.push(`?${newParams.toString()}`);
+  };
 
-      {/* البحث */}
-      <div>
-        <Label htmlFor="search" className="text-sm font-medium">البحث</Label>
-        <Input
-          id="search"
-          placeholder="ابحث عن المنتجات..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="mt-1"
-        />
-      </div>
-
-      {/* الفئة */}
-      {categories && categories?.length > 0 && (
+  return (
+    <div className="bg-gray-100 p-2 rounded-lg shadow-md mb-8">
+      <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">
+        الفلاتر
+      </h3>
+      <div className="flex flex-col gap-4 w-full">
+        {/* Category Filter */}
         <div>
-          <Label htmlFor="category" className="text-sm font-medium">الفئة</Label>
-          <Select value={categoryId} onValueChange={setCategoryId}>
-            <SelectTrigger id="category" className="mt-1">
-              <SelectValue placeholder="اختر فئة" />
-            </SelectTrigger>
-            <SelectContent>
-              {/* <SelectItem value="all">كل الفئات</SelectItem> */}
-              {categories.map((category) => (
-                <SelectItem key={category.id} value={category.id.toString()}>
-                  {category.name.ar ?? category.name.en}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <label
+            htmlFor="category"
+            className="block text-gray-700 dark:text-gray-300 mb-2"
+          >
+            القسم
+          </label>
+          <select
+            id="category"
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          >
+            <option value="">كل الأقسام</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name.ar}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
-
-      {/* الجنس */}
-      <div>
-        <Label htmlFor="gender" className="text-sm font-medium">الجنس</Label>
-        <Select value={gender} onValueChange={setGender}>
-          <SelectTrigger id="gender" className="mt-1">
-            <SelectValue placeholder="اختر الجنس" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="unisex">للجنسين</SelectItem>
-            <SelectItem value="men">رجالي</SelectItem>
-            <SelectItem value="women">حريمي</SelectItem>
-            {/* <SelectItem value="unisex">للجنسين</SelectItem> */}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* النوع */}
-      {types && types?.length > 0 && (
         <div>
-          <Label htmlFor="type" className="text-sm font-medium">النوع</Label>
-          <Select value={typeId} onValueChange={setTypeId}>
-            <SelectTrigger id="type" className="mt-1">
-              <SelectValue placeholder="اختر النوع" />
-            </SelectTrigger>
-            <SelectContent>
-              {/* <SelectItem value="all">كل الأنواع</SelectItem> */}
-              {types.map((type) => (
-                <SelectItem key={type.id} value={type.id.toString()}>
-                  {type.type.ar ?? type.type.en}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <label htmlFor="sort">ترتيب</label>
+          <select
+            id="sort"
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          >
+            <option value="">ترتيب</option>
+            <option value="price_high_to_low">السعر: اعلى</option>
+            <option value="price_low_to_high">السعر: ادنى</option>
+          </select>
         </div>
-      )}
+        {/* Gender Filter */}
+        <div>
+          <label
+            htmlFor="gender"
+            className="block text-gray-700 dark:text-gray-300 mb-2"
+          >
+            النوع
+          </label>
+          <select
+            id="gender"
+            value={gender}
+            onChange={(e) =>
+              setGender(e.target.value as "men" | "women" | "unisex")
+            }
+            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          >
+            <option value="">الكل</option>
+            <option value="men">رجالي</option>
+            <option value="women">نسائي</option>
+            <option value="unisex">للجنسين</option>
+          </select>
+        </div>
 
-      {/* نطاق السعر */}
-      <div>
-        <Label className="text-sm font-medium">نطاق السعر</Label>
-        <Slider
-          value={priceRange}
-          onValueChange={setPriceRange}
-          min={300}
-          max={2000}
-          step={10}
-          className="mt-2 "
-        />
-        <div className="flex justify-between mt-2 text-sm text-muted-foreground">
-          <span>{priceRange[1]} جنيه</span>
-          <span>{priceRange[0]} جنيه</span>
+        {/* Price Range Filters */}
+        <div>
+          <label
+            htmlFor="minPrice"
+            className="block text-gray-700 dark:text-gray-300 mb-2"
+          >
+            الحد الأدنى للسعر
+          </label>
+          <input
+            type="number"
+            id="minPrice"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            placeholder="مثال: 50"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="maxPrice"
+            className="block text-gray-700 dark:text-gray-300 mb-2"
+          >
+            الحد الأقصى للسعر
+          </label>
+          <input
+            type="number"
+            id="maxPrice"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            placeholder="مثال: 200"
+          />
         </div>
       </div>
-
-      {/* زر إعادة تعيين */}
-      <Button
-        variant="outline"
-        className="w-full"
-        onClick={() => {
-          setCategoryId('')
-          setGender('')
-          setTypeId('')
-          setSearch('')
-          setPriceRange([300, 2000])
-        }}
+      <button
+        onClick={applyFilters}
+        className="mt-6 px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors"
       >
-        إعادة تعيين الفلاتر
-      </Button>
+        تطبيق الفلاتر
+      </button>
     </div>
-  )
+  );
 }
