@@ -1,8 +1,6 @@
 // app/products/page.tsx
 
 import { getProductNew } from "@/apis/products";
-import Image from "next/image";
-import Link from "next/link";
 import { Suspense } from "react";
 import { FilterControls } from "@/components/product-filters";
 import { PaginationControls } from "@/components/PaginatedProducts";
@@ -25,7 +23,7 @@ interface ProductsPageProps {
 export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
-  const searchParamsAwaited = await searchParams; // 🚨 التأكد من await
+  const searchParamsAwaited = searchParams; // 🚨 التأكد من await
   const currentPage = parseInt(searchParamsAwaited.page || "1", 10);
   const limit = parseInt(searchParamsAwaited.limit || "12", 10);
 

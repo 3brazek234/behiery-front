@@ -1,6 +1,7 @@
 import React from "react";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { getCategories } from "@/apis/categories";
+import Image from "next/image";
 
 export default async function CategoriesSection() {
   const categories = await getCategories()
@@ -11,7 +12,7 @@ export default async function CategoriesSection() {
           {
             categories && categories.length>0 && categories.map(item => {
               return <div key={item?.id} className="flex flex-col h-20 items-center gap-2 rounded-full shadow border">
-                <img src={item.picture} alt="" />
+                <Image src={item.picture} alt="" width={50} height={50} />
                 <span>{item?.name?.ar}</span>
               </div>
             })
