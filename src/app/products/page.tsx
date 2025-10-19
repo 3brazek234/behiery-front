@@ -21,9 +21,9 @@ interface ProductsPageProps {
 }
 
 export default async function ProductsPage({
-  searchParams,
-}: ProductsPageProps) {
-  const searchParamsAwaited = searchParams; // 🚨 التأكد من await
+  searchParams
+}) {
+  const searchParamsAwaited = searchParams;
   const currentPage = parseInt(searchParamsAwaited.page || "1", 10);
   const limit = parseInt(searchParamsAwaited.limit || "12", 10);
 
