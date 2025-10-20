@@ -114,7 +114,7 @@ export function FilterControls({ currentSearchParams }: FilterControlsProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            placeholder="بحث عن منتج..."
+            placeholder="بحث عن عطر..."
           />
         </div>
         {/* Category Filter */}
@@ -127,7 +127,7 @@ export function FilterControls({ currentSearchParams }: FilterControlsProps) {
           </label>
           <Select value={categoryId} onValueChange={setCategoryId}>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="كل الفئات" />
+              <SelectValue placeholder="اختر الفئة" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">كل الفئات</SelectItem>{" "}
@@ -143,7 +143,7 @@ export function FilterControls({ currentSearchParams }: FilterControlsProps) {
           <label htmlFor="sort">ترتيب</label>
           <Select value={sort} onValueChange={setSort}>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="ترتيب" />
+              <SelectValue placeholder="اختر الترتيب" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="price_high_to_low">السعر: اعلى</SelectItem>
@@ -167,7 +167,7 @@ export function FilterControls({ currentSearchParams }: FilterControlsProps) {
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="الكل" />
+              <SelectValue placeholder="اختر الجنس" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="men">رجالي</SelectItem>

@@ -106,14 +106,14 @@ export function Navbar() {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] rounded-lg">
               <DialogHeader>
-                <DialogTitle className="text-right">بحث في المنتجات</DialogTitle>
+                <DialogTitle className="text-right">بحث في عطور بحيري</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSearch} className="grid gap-4 py-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="search"
-                    placeholder="ابحث عن منتجات..."
+                    placeholder="ابحث عن عطر..."
                     className="pl-10 pr-4 py-5 text-base"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
