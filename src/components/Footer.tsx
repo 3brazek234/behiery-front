@@ -68,7 +68,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/products"
+                  href="/most-sold"
                   className="text-gray-600 dark:text-gray-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
                 >
                   الأكثر مبيعاً

@@ -97,6 +97,11 @@ export default function CartPage() {
                 <div className="md:space-y-2 grid md:grid-cols-2 text-sm">
                   <p className="text-gray-600">الحجم : {item?.option?.size}</p>
                   <p className="text-gray-600">السعر : {item?.option?.sale_price || item?.option?.price} جنيه</p>
+                  {item?.option?.sale_price && (
+                    <p className="text-gray-600 line-through">
+                      {item?.option?.price} جنيه
+                    </p>
+                  )}
                   <p className="text-gray-600">الكمية : {item?.quantity}</p>
                   <p className="text-gray-600">اجمالي : {item?.price} جنيه</p>
                 </div>

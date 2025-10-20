@@ -17,6 +17,8 @@ interface ProductsPageProps {
     min_price?: string;
     max_price?: string;
     sort?: string;
+    search?: string;
+    
   };
 }
 
@@ -39,6 +41,8 @@ export default async function ProductsPage({
       ? parseFloat(searchParamsAwaited.max_price)
       : undefined,
     sort: searchParamsAwaited.sort,
+    search: searchParamsAwaited.search,
+    type: searchParamsAwaited.type,
   };
 
   let productsData: ProcessedProductsResponse; // 🚨 الـ type الصحيح هنا
@@ -46,7 +50,6 @@ export default async function ProductsPage({
 
   try {
     productsData = await getProductNew(fetchOptions);
-    console.log(productsData, "sdhfjhsdf"); // هتلاقي الداتا منظمة هنا
   } catch (e) {
     error = (e as Error).message;
     // 🚨 لازم الـ default object يكون مطابق للـ type بتاع ProcessedProductsResponse
@@ -69,23 +72,23 @@ export default async function ProductsPage({
   }
 
   return (
-    <div className="mx-10 py-8">
-      <div className="flex flex-col mb-12">
+    <div className="container mx-auto py-8">
+      <div className="flex flex-col mb-6">
         <SubTitle title="كل العطور" />
       </div>
 
       <Suspense
         fallback={
-          <div className="mx-auto py-8 flex justify-center items-center">
+          <div className="py-8 flex justify-center items-center">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
         }
       >
-        <div className="flex flex-col-reverse lg:flex-row gap-6">
-          <div className="order-1 lg:order-none">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mx-auto">
+          <div className="col-span-1 order-first md:order-first">
             <FilterControls currentSearchParams={searchParamsAwaited} />
           </div>
-          <div className="flex-1">
+          <div className="col-span-3 order-last md:order-last">
             {/* 🚨 هنا هتستخدم productsData.products.length */}
             {productsData.products.length === 0 ? (
               <p className="text-center text-gray-600 dark:text-gray-400">

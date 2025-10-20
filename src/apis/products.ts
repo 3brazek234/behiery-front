@@ -72,11 +72,13 @@ interface FetchProductsOptions {
   min_price?: number;
   max_price?: number;
   sort?: string;
+  type?: string;
+  search?: string;
 }
 export async function getProductNew(
   options: FetchProductsOptions = {}
 ): Promise<ProcessedProductsResponse> { // 🚨 هنا بترجع ProcessedProductsResponse
-  const { page = 1, limit = 12, category_id, gender, min_price, max_price, sort } = options;
+  const { page = 1, limit = 12, category_id, gender, min_price, max_price, sort, type, search } = options;
 
   const params = new URLSearchParams();
   params.append('page', page.toString());
@@ -86,6 +88,8 @@ export async function getProductNew(
   if (min_price !== undefined) params.append('min_price', min_price.toString());
   if (max_price !== undefined) params.append('max_price', max_price.toString());
   if (sort) params.append('sort', sort);
+  if (type) params.append('type', type);
+  if (search) params.append('search', search);
 
   const url = `${API_BASE_URL}?${params.toString()}`;
 
