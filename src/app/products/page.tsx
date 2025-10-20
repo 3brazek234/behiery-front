@@ -18,13 +18,10 @@ interface ProductsPageProps {
     max_price?: string;
     sort?: string;
     search?: string;
-    
   };
 }
 
-export default async function ProductsPage({
-  searchParams 
-}: any) {
+export default async function ProductsPage({ searchParams }: any) {
   const searchParamsAwaited = searchParams;
   const currentPage = parseInt(searchParamsAwaited.page || "1", 10);
   const limit = parseInt(searchParamsAwaited.limit || "12", 10);
@@ -76,41 +73,39 @@ export default async function ProductsPage({
       <div className="flex flex-col mb-6">
         <SubTitle title="كل العطور" />
       </div>
-
-      <Suspense
-        fallback={
-          <div className="py-8 flex justify-center items-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          </div>
-        }
-      >
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mx-auto">
-          <div className="col-span-1 order-first md:order-first">
-            <FilterControls currentSearchParams={searchParamsAwaited} />
-          </div>
-          <div className="col-span-3 order-last md:order-last">
-            {/* 🚨 هنا هتستخدم productsData.products.length */}
-            {productsData.products.length === 0 ? (
-              <p className="text-center text-gray-600 dark:text-gray-400">
-                لا توجد منتجات مطابقة لمعايير البحث.
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* 🚨 هنا هتستخدم productsData.products.map */}
-                {productsData.products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+      <div className="flex flex-col md:flex-row gap-4">
+        <div>
+          <Suspense
+            fallback={
+              <div className="py-8 flex justify-center items-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
               </div>
-            )}
-          </div>
+            }
+          >
+            <FilterControls currentSearchParams={searchParamsAwaited} />
+          </Suspense>
         </div>
-      </Suspense>
-
-      <div className="mt-10">
-        <PaginationControls
-          currentPage={productsData.currentPage}
-          totalPages={productsData.totalPages} // 🚨 تم الإصلاح هنا
-        />
+        <div className="flex-1">
+          {/* 🚨 هنا هتستخدم productsData.products.length */}
+          {productsData.products.length === 0 ? (
+            <p className="text-center text-gray-600 dark:text-gray-400">
+              لا توجد منتجات مطابقة لمعايير البحث.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* 🚨 هنا هتستخدم productsData.products.map */}
+              {productsData.products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+              <div className="mt-10">
+                <PaginationControls
+                  currentPage={productsData.currentPage}
+                  totalPages={productsData.totalPages} // 🚨 تم الإصلاح هنا
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

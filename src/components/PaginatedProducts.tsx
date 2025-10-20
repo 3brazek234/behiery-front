@@ -2,6 +2,8 @@
 "use client";
 
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Button } from './ui/button';
+import { useEffect, useState } from 'react'; // 🚨 استيراد useState و useEffect
 
 interface PaginationControlsProps {
   currentPage: number;
@@ -12,6 +14,31 @@ export function PaginationControls({ currentPage, totalPages }: PaginationContro
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // 🚨 state لتحديد عدد الصفحات اللي هتظهر بناءً على حجم الشاشة
+  const [maxPagesToShow, setMaxPagesToShow] = useState(5); // القيمة الافتراضية
+
+  // 🚨 useEffect عشان يحدد maxPagesToShow بناءً على عرض الشاشة
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 640) { // breakpoint لـ sm في Tailwind
+        setMaxPagesToShow(3); // مثلاً 3 أزرار على الموبايل
+      } else if (window.innerWidth < 768) { // breakpoint لـ md في Tailwind
+        setMaxPagesToShow(5); // 5 أزرار على الشاشات الصغيرة والمتوسطة
+      } else {
+        setMaxPagesToShow(7); // 7 أزرار على الشاشات الكبيرة
+      }
+    }
+
+    // استدعيها مرة واحدة عند التحميل
+    handleResize();
+
+    // أضف event listener للتغيير لما حجم الشاشة يتغير
+    window.addEventListener('resize', handleResize);
+
+    // cleanup function لإزالة الـ event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []); // [] عشان يتنفذ مرة واحدة عند الـ mount
+
   const handlePageChange = (newPage: number) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set('page', newPage.toString());
@@ -20,7 +47,6 @@ export function PaginationControls({ currentPage, totalPages }: PaginationContro
 
   const getPageNumbers = () => {
     const pages = [];
-    const maxPagesToShow = 5; // عدد الأزرار اللي هتظهر
     let startPage, endPage;
 
     if (totalPages <= maxPagesToShow) {
@@ -51,60 +77,68 @@ export function PaginationControls({ currentPage, totalPages }: PaginationContro
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-8">
-      <button
+    <div className="flex justify-center items-center gap-1 sm:gap-2 mt-8 flex-wrap"> {/* 🚨 تعديل الـ gap و إضافة flex-wrap */}
+      <Button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage <= 1}
-        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        variant="outline" // 🚨 استخدم variant من shadcn/ui/button
+        className="h-9 px-4 py-2" // 🚨 تحسين حجم الزرار
       >
         السابق
-      </button>
+      </Button>
 
+      {/* عرض زر الصفحة الأولى والـ dots لو لازم الأمر */}
       {pageNumbers[0] > 1 && (
         <>
-          <button
+          <Button
             onClick={() => handlePageChange(1)}
-            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            variant="outline"
+            className="h-9 px-4 py-2"
           >
             1
-          </button>
-          {pageNumbers[0] > 2 && <span className="px-2 py-2 text-gray-600 dark:text-gray-400">...</span>}
+          </Button>
+          {pageNumbers[0] > 2 && <span className="h-9 px-2 py-2 flex items-end text-gray-600 dark:text-gray-400">...</span>} {/* 🚨 تعديل الـ styling للـ dots */}
         </>
       )}
 
+      {/* أزرار الصفحات الرئيسية */}
       {pageNumbers.map((page) => (
-        <button
+        <Button
           key={page}
           onClick={() => handlePageChange(page)}
-          className={`px-4 py-2 rounded-md transition-colors ${
+          variant={page === currentPage ? "default" : "outline"} // 🚨 استخدام variant
+          className={`h-9 px-4 py-2 ${
             page === currentPage
-              ? 'bg-orange-500 text-white font-bold'
-              : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
+              ? 'bg-primary text-primary-foreground hover:bg-primary/90' // لون الزرار النشط
+              : 'text-foreground' // لون الأزرار العادية
           }`}
         >
           {page}
-        </button>
+        </Button>
       ))}
 
+      {/* عرض زر الصفحة الأخيرة والـ dots لو لازم الأمر */}
       {pageNumbers[pageNumbers.length - 1] < totalPages && (
         <>
-          {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && <span className="px-2 py-2 text-gray-600 dark:text-gray-400">...</span>}
-          <button
+          {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && <span className="h-9 px-2 py-2 flex items-end text-gray-600 dark:text-gray-400">...</span>} {/* 🚨 تعديل الـ styling للـ dots */}
+          <Button
             onClick={() => handlePageChange(totalPages)}
-            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            variant="outline"
+            className="h-9 px-4 py-2"
           >
             {totalPages}
-          </button>
+          </Button>
         </>
       )}
 
-      <button
+      <Button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
-        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        variant="outline"
+        className="h-9 px-4 py-2"
       >
         التالي
-      </button>
+      </Button>
     </div>
   );
 }
